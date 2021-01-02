@@ -4,7 +4,15 @@
 namespace App\Http\Repositories;
 
 
-class UserRepository
-{
+use App\Models\User;
 
+class UserRepository extends Repository
+{
+    /**
+     * UserRepository constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct(new User());
+    }
 }

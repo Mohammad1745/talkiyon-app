@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('role');
             $table->tinyInteger('gender');
             $table->tinyInteger('status');
+            $table->string('email_verification_code')->nullable();
+            $table->string('phone_verification_code')->nullable();
             $table->boolean('is_email_verified')->default(false);
             $table->boolean('is_phone_verified')->default(false);
             $table->string('image')->nullable();

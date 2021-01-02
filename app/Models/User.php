@@ -27,6 +27,8 @@ class User extends Authenticatable
         'role',
         'gender',
         'status',
+        'email_verification_code',
+        'phone_verification_code',
         'is_email_verified',
         'is_phone_verified',
         'image'
