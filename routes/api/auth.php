@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +18,5 @@ Route::post('/signup', [AuthController::class, 'signup'])->name('api.signup');
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 Route::middleware('auth:api')->group(function () {
     Route::get('/resend-email-verification-code', [AuthController::class, 'resendEmailVerificationCode'])->name('api.resendEmailVerificationCode');
+    Route::get('/email-verification', [AuthController::class, 'emailVerification'])->name('api.emailVerification');
 });

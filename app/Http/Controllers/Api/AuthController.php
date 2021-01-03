@@ -51,6 +51,14 @@ class AuthController extends Controller
     }
 
 //    /**
+//     * @return JsonResponse
+//     */
+//    public function emailVerification(): JsonResponse
+//    {
+//        return response()->json( $this->authService->emailVerificationProcess());
+//    }
+
+//    /**
 //     * @param PhoneVerificationRequest $request
 //     * @return JsonResponse
 //     */
