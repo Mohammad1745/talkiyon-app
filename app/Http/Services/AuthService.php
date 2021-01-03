@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthService extends Service
 {
@@ -42,15 +43,16 @@ class AuthService extends Service
             $randNo = randomNumber(6);
             $user  = $this->userService->create($this->userService->userDataFormatter($request->all(),$randNo));
             $this->studentInfoService->create($this->studentInfoService->studentInfoDataFormatter($user->id, $request->all()));
-//            $this->phoneVerificationCodeSender($user->phone,$randNo);
+            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
             $authorization['token'] =  $user->createToken('Talkiyon')->accessToken;
             $authorization['token_type'] =  'Bearer';
             $user = User::find($user->id);
             DB::commit();
 
-            return $this->response($this->authData($user, $authorization))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
+            return $this->response($this->_authData($user, $authorization))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
         } catch (\Exception $exception) {
             DB::rollBack();
+
             return $this->response()->error($exception->getMessage());
         }
     }
@@ -62,18 +64,38 @@ class AuthService extends Service
     public function loginProcess(LoginRequest $request): array
     {
         try {
-            if(Auth::attempt($this->credentials($request->only('email', 'password')))){
+            if(Auth::attempt($this->_credentials($request->only('email', 'password')))){
                 $user = authUser();
                 $authorization['token'] =  $user->createToken('Talkiyon')->accessToken;
                 $authorization['token_type'] =  'Bearer';
                 $user = User::find($user->id);
                 DB::commit();
 
-                return $this->response($this->authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_email_verified ? 'Please verify your email' : ''));
+                return $this->response($this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_email_verified ? 'Please verify your email' : ''));
             } else {
                 return $this->response()->error('Wrong Email Or Password');
             }
         } catch (\Exception $exception) {
+            return $this->response()->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function resendEmailVerificationCodeProcess(): array
+    {
+        try {
+            DB::beginTransaction();
+            $randNo = randomNumber(6);
+            $user = Auth::user();
+            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
+            DB::commit();
+
+            return $this->response()->success(__("Verification Code has been sent to ".$user->email.'.'));
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
             return $this->response()->error($exception->getMessage());
         }
     }
@@ -97,11 +119,25 @@ class AuthService extends Service
     }
 
     /**
+     * @param string $name
+     * @param string $email
+     * @param string $code
+     */
+    private function _emailVerificationCodeSender(string $name, string $email, string $code)
+    {
+        $data = array('name'=> $name, 'code' => $code);
+        Mail::send('email.auth.verification', $data, function($message) use ($name, $email) {
+            $message->to($email, $name)
+                ->subject('Email Verification');
+            $message->from('talkiyon@example.com', 'Talkiyon');
+        });
+    }
+    /**
      * @param User $user
      * @param array $authorization
      * @return array
      */
-    private function authData(User $user, array $authorization): array
+    private function _authData(User $user, array $authorization): array
     {
         return [
             'authorization' => $authorization,
@@ -120,7 +156,7 @@ class AuthService extends Service
      * @param array $data
      * @return array
      */
-    private function credentials(array $data) : array {
+    private function _credentials(array $data) : array {
         return filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? [
             'email' => $data['email'],
             'password' => $data['password']

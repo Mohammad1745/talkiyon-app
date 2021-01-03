@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signup', [AuthController::class, 'signup'])->name('api.signup');
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
+Route::middleware('auth:api')->group(function () {
+    Route::get('/resend-email-verification-code', [AuthController::class, 'resendEmailVerificationCode'])->name('api.resendEmailVerificationCode');
+});
