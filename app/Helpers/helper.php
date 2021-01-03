@@ -7,7 +7,7 @@
  */
 
 use App\Models\AdminSetting;
-use App\Models\PersonalSetting;
+use App\Models\StudentSetting;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -326,8 +326,8 @@ function userRoles($input = null)
 {
     $output = [
         ADMIN_ROLE => __('Admin'),
-        STUDENT_ROLE => __('Personal'),
-        TEACHER_ROLE => __('Employee'),
+        STUDENT_ROLE => __('Student'),
+        TEACHER_ROLE => __('Teacher'),
     ];
 
     if (is_null($input)) {
@@ -344,7 +344,7 @@ function userRoles($input = null)
 function accountTypes($input = null)
 {
     $output = [
-        STUDENT_ROLE => __('Personal'),
+        STUDENT_ROLE => __('Student'),
     ];
 
     if (is_null($input)) {
