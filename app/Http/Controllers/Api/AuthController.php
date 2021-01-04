@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\EmailVerificationRequest;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\SignupRequest;
 use App\Http\Services\AuthService;
@@ -50,13 +51,14 @@ class AuthController extends Controller
         return response()->json( $this->authService->resendEmailVerificationCodeProcess());
     }
 
-//    /**
-//     * @return JsonResponse
-//     */
-//    public function emailVerification(): JsonResponse
-//    {
-//        return response()->json( $this->authService->emailVerificationProcess());
-//    }
+    /**
+     * @param EmailVerificationRequest $request
+     * @return JsonResponse
+     */
+    public function emailVerification(EmailVerificationRequest $request): JsonResponse
+    {
+        return response()->json( $this->authService->emailVerificationProcess($request));
+    }
 
 //    /**
 //     * @param PhoneVerificationRequest $request
@@ -94,15 +96,11 @@ class AuthController extends Controller
 //    }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
-    public function logout (Request $request) {
-        $request->user()->token()->revoke();
-        return response()->json([
-            'success' => true,
-            'message' => __('Successfully logged out')
-        ]);
+    public function logout (): JsonResponse
+    {
+        return response()->json( $this->authService->logoutProcess());
     }
 
 

@@ -3,6 +3,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Requests\Api\EmailVerificationRequest;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\SignupRequest;
 use App\Http\Services\Base\StudentInfoService;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use const http\Client\Curl\AUTH_ANY;
 
 class AuthService extends Service
 {
@@ -46,7 +48,6 @@ class AuthService extends Service
             $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
             $authorization['token'] =  $user->createToken('Talkiyon')->accessToken;
             $authorization['token_type'] =  'Bearer';
-            $user = User::find($user->id);
             DB::commit();
 
             return $this->response($this->_authData($user, $authorization))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
@@ -68,7 +69,6 @@ class AuthService extends Service
                 $user = authUser();
                 $authorization['token'] =  $user->createToken('Talkiyon')->accessToken;
                 $authorization['token_type'] =  'Bearer';
-                $user = User::find($user->id);
                 DB::commit();
 
                 return $this->response($this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_email_verified ? 'Please verify your email' : ''));
@@ -101,13 +101,34 @@ class AuthService extends Service
     }
 
     /**
+     * @param EmailVerificationRequest $request
+     * @return array
+     */
+    public function emailVerificationProcess(EmailVerificationRequest $request): array
+    {
+        try {
+            if (Auth::user()->email==$request->email && Auth::user()->email_verification_code==$request->code){
+                $this->userService->verifyEmail(Auth::id());
+
+                return $this->response()->success(__("Email Successfully Verified."));
+            } else {
+                return $this->response()->error(__('Wrong entry'));
+            }
+
+        } catch (\Exception $exception) {
+
+            return $this->response()->error($exception->getMessage());
+        }
+    }
+
+    /**
      * @return array
      */
     public function logoutProcess(): array
     {
         try {
             if(Auth::user()){
-                Auth::logout();
+                Auth::user()->token()->revoke();
 
                 return $this->response()->success('Logged Out Successfully');
             } else {

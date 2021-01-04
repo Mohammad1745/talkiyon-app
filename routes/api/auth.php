@@ -18,5 +18,6 @@ Route::post('/signup', [AuthController::class, 'signup'])->name('api.signup');
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 Route::middleware('auth:api')->group(function () {
     Route::get('/resend-email-verification-code', [AuthController::class, 'resendEmailVerificationCode'])->name('api.resendEmailVerificationCode');
-    Route::get('/email-verification', [AuthController::class, 'emailVerification'])->name('api.emailVerification');
+    Route::post('/email-verification', [AuthController::class, 'emailVerification'])->name('api.emailVerification');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('api.logout');
 });

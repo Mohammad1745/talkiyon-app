@@ -7,6 +7,8 @@ namespace App\Http\Services\Base;
 use App\Http\Repositories\UserRepository;
 use App\Http\Services\Service;
 use Illuminate\Support\Facades\Hash;
+use phpDocumentor\Reflection\Types\Integer;
+use phpseclib\Math\BigInteger;
 
 class UserService extends Service
 {
@@ -51,8 +53,17 @@ class UserService extends Service
      * @param $data
      * @return mixed
      */
-    public function create($data)
+    public function create(array $data)
     {
         return $this->repository->create($data);
+    }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function verifyEmail(int $userId)
+    {
+        return $this->repository->updateWhere(['id' => $userId], ['is_email_verified' => true, 'email_verification_code' => null]);
     }
 }
