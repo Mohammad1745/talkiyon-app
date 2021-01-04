@@ -76,4 +76,14 @@ class UserService extends Service
     {
         return $this->repository->create($data);
     }
+
+    /**
+     * @param array $where
+     * @param array $data
+     * @return mixed
+     */
+    public function updateWhere(array $where, array $data)
+    {
+        return $this->repository->updateWhere($where, $data);
+    }
 }

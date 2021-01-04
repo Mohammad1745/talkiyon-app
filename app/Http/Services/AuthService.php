@@ -99,6 +99,7 @@ class AuthService extends Service
             DB::beginTransaction();
             $randNo = randomNumber(6);
             $user = Auth::user();
+            $this->userService->updateWhere(['id' => $user->id], ['email_verification_code' => $randNo]);
             $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
             DB::commit();
 
