@@ -50,12 +50,13 @@ class UserService extends Service
     }
 
     /**
-     * @param $data
+     * @param int $userId
+     * @param string $password
      * @return mixed
      */
-    public function create(array $data)
+    public function resetPassword(int $userId, string $password)
     {
-        return $this->repository->create($data);
+        return $this->repository->updateWhere(['id' => $userId], ['password' => Hash::make($password)]);
     }
 
     /**
@@ -65,5 +66,14 @@ class UserService extends Service
     public function verifyEmail(int $userId)
     {
         return $this->repository->updateWhere(['id' => $userId], ['is_email_verified' => true, 'email_verification_code' => null]);
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function create(array $data)
+    {
+        return $this->repository->create($data);
     }
 }

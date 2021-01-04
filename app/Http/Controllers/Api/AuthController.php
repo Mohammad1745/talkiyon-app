@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\EmailVerificationRequest;
 use App\Http\Requests\Api\LoginRequest;
+use App\Http\Requests\Api\ResetPasswordRequest;
+use App\Http\Requests\Api\SendResetPasswordCodeRequest;
 use App\Http\Requests\Api\SignupRequest;
 use App\Http\Services\AuthService;
 use Illuminate\Http\JsonResponse;
@@ -76,24 +78,24 @@ class AuthController extends Controller
 //        $response = $this->authService->resendPhoneVerificationCode();
 //        return response()->json($response);
 //    }
-//
-//    /**
-//     * @param ForgetPasswordRequest $request
-//     * @return JsonResponse
-//     */
-//    public function forgetPasswordSendCode(ForgetPasswordRequest $request) {
-//        $response = $this->authService->sendForgetPasswordCode($request);
-//        return response()->json($response);
-//    }
-//
-//    /**
-//     * @param ForgetPasswordCodeSubmitRequest $request
-//     * @return JsonResponse
-//     */
-//    public function resetPasswordCode(ForgetPasswordCodeSubmitRequest $request) {
-//        $response = $this->authService->forgetPasswordCodeSubmit($request);
-//        return response()->json($response);
-//    }
+
+    /**
+     * @param SendResetPasswordCodeRequest $request
+     * @return JsonResponse
+     */
+    public function sendResetPasswordCode(SendResetPasswordCodeRequest $request): JsonResponse
+    {
+        return response()->json( $this->authService->sendResetPasswordCodeProcess($request));
+    }
+
+    /**
+     * @param ResetPasswordRequest $request
+     * @return JsonResponse
+     */
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        return response()->json( $this->authService->resetPasswordProcess($request));
+    }
 
     /**
      * @return JsonResponse

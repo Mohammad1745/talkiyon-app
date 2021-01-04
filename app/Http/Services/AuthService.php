@@ -5,15 +5,16 @@ namespace App\Http\Services;
 
 use App\Http\Requests\Api\EmailVerificationRequest;
 use App\Http\Requests\Api\LoginRequest;
+use App\Http\Requests\Api\ResetPasswordRequest;
+use App\Http\Requests\Api\SendResetPasswordCodeRequest;
 use App\Http\Requests\Api\SignupRequest;
+use App\Http\Services\Base\ResetPasswordService;
 use App\Http\Services\Base\StudentInfoService;
 use App\Http\Services\Base\UserService;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use const http\Client\Curl\AUTH_ANY;
 
 class AuthService extends Service
 {
@@ -21,16 +22,25 @@ class AuthService extends Service
      * @var UserService
      */
     private $userService;
+    /**
+     * @var ResetPasswordService
+     */
+    private $resetPasswordService;
+    /**
+     * @var StudentInfoService
+     */
     private $studentInfoService;
 
     /**
      * AuthService constructor.
      * @param UserService $userService
      * @param StudentInfoService $studentInfoService
+     * @param ResetPasswordService $resetPasswordService
      */
-    public function __construct(UserService $userService, StudentInfoService $studentInfoService)
+    public function __construct(UserService $userService, StudentInfoService $studentInfoService, ResetPasswordService $resetPasswordService)
     {
         $this->userService = $userService;
+        $this->resetPasswordService = $resetPasswordService;
         $this->studentInfoService = $studentInfoService;
     }
 
@@ -107,15 +117,63 @@ class AuthService extends Service
     public function emailVerificationProcess(EmailVerificationRequest $request): array
     {
         try {
-            if (Auth::user()->email==$request->email && Auth::user()->email_verification_code==$request->code){
-                $this->userService->verifyEmail(Auth::id());
-
-                return $this->response()->success(__("Email Successfully Verified."));
-            } else {
+            if (!(Auth::user()->email==$request->email && Auth::user()->email_verification_code==$request->code)){
                 return $this->response()->error(__('Wrong entry'));
             }
+            $this->userService->verifyEmail(Auth::id());
+
+            return $this->response()->success(__("Email Successfully Verified."));
 
         } catch (\Exception $exception) {
+            return $this->response()->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param SendResetPasswordCodeRequest $request
+     * @return array
+     */
+    public function sendResetPasswordCodeProcess(SendResetPasswordCodeRequest $request): array
+    {
+        try {
+            DB::beginTransaction();
+            $randNo = randomNumber(6);
+            $user = User::where('email', $request->email)->first();//TODO:change it.
+            $this->resetPasswordService->create($this->resetPasswordService->resetPasswordDataFormatter($user->id, $randNo));
+            $this->_resetPasswordCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
+            DB::commit();
+
+            return $this->response()->success(__("Password Reset Code has been sent to ".$user->email.'.'));
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            return $this->response()->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param ResetPasswordRequest $request
+     * @return array
+     */
+    public function resetPasswordProcess(ResetPasswordRequest $request): array
+    {
+        try {
+            DB::beginTransaction();
+            $user = User::where('email', $request->email)->first();//TODO:change it.
+            $passwordReset = $user ? $this->resetPasswordService->firstWhere(['user_id' => $user->id, 'code' => $request->code]) : null;
+            if (!$passwordReset){
+                DB::rollBack();
+
+                return $this->response()->error(__('Wrong entry'));
+            }
+            $this->resetPasswordService->deleteWhere(['user_id' => $user->id]);
+            $this->userService->resetPassword($user->id, $request->password);
+            DB::commit();
+
+            return $this->response()->success(__("Password Reset Successful."));
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
 
             return $this->response()->error($exception->getMessage());
         }
@@ -150,6 +208,21 @@ class AuthService extends Service
         Mail::send('email.auth.verification', $data, function($message) use ($name, $email) {
             $message->to($email, $name)
                 ->subject('Email Verification');
+            $message->from('talkiyon@example.com', 'Talkiyon');
+        });
+    }
+
+    /**
+     * @param string $name
+     * @param string $email
+     * @param string $code
+     */
+    private function _resetPasswordCodeSender(string $name, string $email, string $code)
+    {
+        $data = array('name'=> $name, 'code' => $code);
+        Mail::send('email.auth.reset-password', $data, function($message) use ($name, $email) {
+            $message->to($email, $name)
+                ->subject('Reset Password');
             $message->from('talkiyon@example.com', 'Talkiyon');
         });
     }
