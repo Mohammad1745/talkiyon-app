@@ -6,14 +6,9 @@ namespace App\Http\Services\Base;
 
 use App\Http\Repositories\StudentInfoRepository;
 use App\Http\Services\Service;
-use Illuminate\Support\Facades\Hash;
 
 class StudentInfoService extends Service
 {
-    /**
-     * @var StudentInfoRepository
-     */
-    public $repository;
 
     /**
      * StudentInfoService constructor.
@@ -21,7 +16,7 @@ class StudentInfoService extends Service
      */
     public function __construct(StudentInfoRepository $repository)
     {
-        $this->repository = $repository;
+        parent::__construct($repository);
     }
 
     /**
@@ -38,14 +33,5 @@ class StudentInfoService extends Service
             ];
         }
         return [];
-    }
-
-    /**
-     * @param $data
-     * @return mixed
-     */
-    public function create($data)
-    {
-        return $this->repository->create($data);
     }
 }

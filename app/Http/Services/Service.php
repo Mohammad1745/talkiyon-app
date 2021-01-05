@@ -7,54 +7,134 @@ namespace App\Http\Services;
 class Service
 {
     /**
-     * @var array
+     * @var
      */
-    private $response = [
-        'success' => null,
-        'message' => '',
-        'data' => null
-    ];
-    /**
-     * @var string
-     */
-    private $errorMessage = 'Something went wrong! ';
+    private $repository;
 
     /**
-     * @param null $data
-     * @return $this
+     * BaseService constructor.
+     * @param $repository
      */
-    protected function response($data=null): Service
+    public function __construct($repository)
     {
-        $this->response['data'] = $data;
-
-        return $this;
+        $this->repository = $repository;
     }
 
     /**
-     * @param null $message
-     * @return array
+     * @return mixed
      */
-    protected function success($message=null): array
+    public function all()
     {
-        $this->response['success'] = true;
-        $this->response['message'] = $message ?
-            __($message) :
-            __('Done');
-
-        return $this->response;
+        return $this->repository->all();
     }
 
     /**
-     * @param null $message
-     * @return array
+     * @param array $data
+     * @return mixed
      */
-    protected function error($message=null): array
+    public function create(array $data)
     {
-        $this->response['success'] = false;
-        $this->response['message'] = $message ?
-            __($message) :
-            __($this->errorMessage);
+        return $this->repository->create($data);
+    }
 
-        return $this->response;
+    /**
+     * @param int $id
+     * @param array $data
+     * @return mixed
+     */
+    public function update(int $id, array $data)
+    {
+        return $this->repository->update($id, $data);
+    }
+
+    /**
+     * @param array $where
+     * @param array $data
+     * @return mixed
+     */
+    public function updateWhere(array $where, array $data)
+    {
+        return $this->repository->updateWhere($where, $data);
+    }
+
+    /**
+     * @param array $where
+     * @param array $data
+     * @return mixed
+     */
+    public function updateOrCreate(array $where, array $data){
+        return $this->repository->updateOrCreate($where, $data);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function delete(int $id) {
+        return $this->repository->delete($id);
+    }
+
+    /**
+     * @param array $where
+     * @return mixed
+     */
+    public function deleteWhere(array $where)
+    {
+        return $this->repository->deleteWhere($where);
+    }
+
+    /**
+     * @param array $where
+     * @return mixed
+     */
+    public function firstWhere(array $where)
+    {
+        return $this->repository->firstWhere($where);
+    }
+
+    /**
+     * @param array $where
+     * @return mixed
+     */
+    public function lastWhere(array $where)
+    {
+        return $this->repository->lastWhere($where);
+    }
+
+    /**
+     * @param array $where
+     * @return mixed
+     */
+    public function pluckWhere(array $where)
+    {
+        return $this->repository->pluckWhere($where);
+    }
+
+    /**
+     * @param array $where
+     * @return mixed
+     */
+    public function getWhere(array $where)
+    {
+        return $this->repository->getWhere($where);
+    }
+
+    /**
+     * @param array $where
+     * @return mixed
+     */
+    public function countWhere(array $where)
+    {
+        return $this->repository->countWhere($where);
+    }
+
+    /**
+     * @param array $where
+     * @param string $field
+     * @return mixed
+     */
+    public function sumWhere(array $where, string $field)
+    {
+        return $this->repository->sumWhere($where, $field);
     }
 }

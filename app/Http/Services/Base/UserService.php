@@ -7,24 +7,18 @@ namespace App\Http\Services\Base;
 use App\Http\Repositories\UserRepository;
 use App\Http\Services\Service;
 use Illuminate\Support\Facades\Hash;
-use phpDocumentor\Reflection\Types\Integer;
-use phpseclib\Math\BigInteger;
 
 class UserService extends Service
 {
-    /**
-     * @var UserRepository
-     */
-    public $repository;
-
     /**
      * UserService constructor.
      * @param UserRepository $repository
      */
     public function __construct(UserRepository $repository)
     {
-        $this->repository = $repository;
+        parent::__construct($repository);
     }
+
     /**
      * @param $request
      * @param $randNo
@@ -56,7 +50,7 @@ class UserService extends Service
      */
     public function resetPassword(int $userId, string $password)
     {
-        return $this->repository->updateWhere(['id' => $userId], ['password' => Hash::make($password)]);
+        return $this->updateWhere(['id' => $userId], ['password' => Hash::make($password)]);
     }
 
     /**
@@ -65,25 +59,6 @@ class UserService extends Service
      */
     public function verifyEmail(int $userId)
     {
-        return $this->repository->updateWhere(['id' => $userId], ['is_email_verified' => true, 'email_verification_code' => null]);
-    }
-
-    /**
-     * @param $data
-     * @return mixed
-     */
-    public function create(array $data)
-    {
-        return $this->repository->create($data);
-    }
-
-    /**
-     * @param array $where
-     * @param array $data
-     * @return mixed
-     */
-    public function updateWhere(array $where, array $data)
-    {
-        return $this->repository->updateWhere($where, $data);
+        return $this->updateWhere(['id' => $userId], ['is_email_verified' => true, 'email_verification_code' => null]);
     }
 }

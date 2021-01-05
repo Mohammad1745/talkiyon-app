@@ -9,7 +9,6 @@ use App\Http\Requests\Api\SendResetPasswordCodeRequest;
 use App\Http\Requests\Api\SignupRequest;
 use App\Http\Services\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
