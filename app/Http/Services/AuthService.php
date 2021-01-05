@@ -55,11 +55,9 @@ class AuthService extends ResponseService
             $user  = $this->userService->create($this->userService->userDataFormatter($request->all(),$randNo));
             $this->studentInfoService->create($this->studentInfoService->studentInfoDataFormatter($user->id, $request->all()));
             $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
-            $authorization['token'] =  $user->createToken('Talkiyon')->accessToken;
-            $authorization['token_type'] =  'Bearer';
             DB::commit();
 
-            return $this->response($this->_authData($user, $authorization))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
+            return $this->response($this->_authData($user))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
         } catch (\Exception $exception) {
             DB::rollBack();
 
@@ -76,11 +74,8 @@ class AuthService extends ResponseService
         try {
             if(Auth::attempt($this->_credentials($request->only('email', 'password')))){
                 $user = Auth::user();
-                $authorization['token'] =  $user->createToken('Talkiyon')->accessToken;
-                $authorization['token_type'] =  'Bearer';
-                DB::commit();
 
-                return $this->response($this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_email_verified ? 'Please verify your email' : ''));
+                return $this->response($this->_authData($user))->success('Logged In Successfully. '.(!$user->is_email_verified ? 'Please verify your email' : ''));
             } else {
                 return $this->response()->error('Wrong Email Or Password');
             }
@@ -123,7 +118,6 @@ class AuthService extends ResponseService
             $this->userService->verifyEmail(Auth::id());
 
             return $this->response()->success(__("Email Successfully Verified."));
-
         } catch (\Exception $exception) {
             return $this->response()->error($exception->getMessage());
         }
@@ -229,13 +223,15 @@ class AuthService extends ResponseService
 
     /**
      * @param object $user
-     * @param array $authorization
      * @return array
      */
-    private function _authData(object $user, array $authorization): array
+    private function _authData(object $user): array
     {
         return [
-            'authorization' => $authorization,
+            'authorization' => [
+                'token' =>  $user->createToken('Talkiyon')->accessToken,
+                'token_type' =>  'Bearer'
+            ],
             'user_info' => [
                 'first_name' => $user->first_name,
                 'last_name' => $user->last_name,
