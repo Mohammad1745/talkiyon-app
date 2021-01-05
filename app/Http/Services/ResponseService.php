@@ -31,10 +31,10 @@ class ResponseService
     }
 
     /**
-     * @param string $message
+     * @param string|null $message
      * @return array
      */
-    protected function success(string $message=""): array
+    protected function success(string $message=null): array
     {
         $this->response['success'] = true;
         $this->response['message'] = $message ?
@@ -45,10 +45,10 @@ class ResponseService
     }
 
     /**
-     * @param string $message
+     * @param string|null $message
      * @return array
      */
-    protected function error(string $message=""): array
+    protected function error(string $message=null): array
     {
         $this->response['success'] = false;
         $this->response['message'] = $message ?

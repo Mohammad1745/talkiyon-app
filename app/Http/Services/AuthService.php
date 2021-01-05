@@ -11,7 +11,6 @@ use App\Http\Requests\Api\SignupRequest;
 use App\Http\Services\Base\ResetPasswordService;
 use App\Http\Services\Base\StudentInfoService;
 use App\Http\Services\Base\UserService;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -76,7 +75,7 @@ class AuthService extends ResponseService
     {
         try {
             if(Auth::attempt($this->_credentials($request->only('email', 'password')))){
-                $user = authUser();
+                $user = Auth::user();
                 $authorization['token'] =  $user->createToken('Talkiyon')->accessToken;
                 $authorization['token_type'] =  'Bearer';
                 DB::commit();
@@ -139,7 +138,7 @@ class AuthService extends ResponseService
         try {
             DB::beginTransaction();
             $randNo = randomNumber(6);
-            $user = User::where('email', $request->email)->first();//TODO:change it.
+            $user = $this->userService->firstWhere(['email' => $request->email]);
             $this->resetPasswordService->create($this->resetPasswordService->resetPasswordDataFormatter($user->id, $randNo));
             $this->_resetPasswordCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
             DB::commit();
@@ -160,7 +159,7 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            $user = User::where('email', $request->email)->first();//TODO:change it.
+            $user = $this->userService->firstWhere(['email' => $request->email]);
             $passwordReset = $user ? $this->resetPasswordService->firstWhere(['user_id' => $user->id, 'code' => $request->code]) : null;
             if (!$passwordReset){
                 DB::rollBack();
@@ -227,12 +226,13 @@ class AuthService extends ResponseService
             $message->from('talkiyon@example.com', 'Talkiyon');
         });
     }
+
     /**
-     * @param User $user
+     * @param object $user
      * @param array $authorization
      * @return array
      */
-    private function _authData(User $user, array $authorization): array
+    private function _authData(object $user, array $authorization): array
     {
         return [
             'authorization' => $authorization,
