@@ -3,11 +3,6 @@
 
 namespace App\Http\Services;
 
-use App\Http\Requests\Api\EmailVerificationRequest;
-use App\Http\Requests\Api\LoginRequest;
-use App\Http\Requests\Api\ResetPasswordRequest;
-use App\Http\Requests\Api\SendResetPasswordCodeRequest;
-use App\Http\Requests\Api\SignupRequest;
 use App\Http\Services\Base\ResetPasswordService;
 use App\Http\Services\Base\StudentInfoService;
 use App\Http\Services\Base\UserService;
@@ -44,10 +39,10 @@ class AuthService extends ResponseService
     }
 
     /**
-     * @param SignupRequest $request
+     * @param object $request
      * @return array
      */
-    public function signupProcess(SignupRequest $request): array
+    public function signupProcess(object $request): array
     {
         try {
             DB::beginTransaction();
@@ -66,10 +61,10 @@ class AuthService extends ResponseService
     }
 
     /**
-     * @param LoginRequest $request
+     * @param object $request
      * @return array
      */
-    public function loginProcess(LoginRequest $request): array
+    public function loginProcess(object $request): array
     {
         try {
             if(Auth::attempt($this->_credentials($request->only('email', 'password')))){
@@ -106,10 +101,10 @@ class AuthService extends ResponseService
     }
 
     /**
-     * @param EmailVerificationRequest $request
+     * @param object $request
      * @return array
      */
-    public function emailVerificationProcess(EmailVerificationRequest $request): array
+    public function emailVerificationProcess(object $request): array
     {
         try {
             if (!(Auth::user()->email==$request->email && Auth::user()->email_verification_code==$request->code)){
@@ -124,10 +119,10 @@ class AuthService extends ResponseService
     }
 
     /**
-     * @param SendResetPasswordCodeRequest $request
+     * @param object $request
      * @return array
      */
-    public function sendResetPasswordCodeProcess(SendResetPasswordCodeRequest $request): array
+    public function sendResetPasswordCodeProcess(object $request): array
     {
         try {
             DB::beginTransaction();
@@ -146,10 +141,10 @@ class AuthService extends ResponseService
     }
 
     /**
-     * @param ResetPasswordRequest $request
+     * @param object $request
      * @return array
      */
-    public function resetPasswordProcess(ResetPasswordRequest $request): array
+    public function resetPasswordProcess(object $request): array
     {
         try {
             DB::beginTransaction();
