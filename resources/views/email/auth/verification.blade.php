@@ -21,7 +21,7 @@
     </style>
 </head>
 <body class="antialiased">
-    Hello <strong>{{ $name }}</strong>,
-    <p>Your Code is: {{$code}}</p>
+Hello <strong>{{ $name }}</strong>,
+<p>Your Email Verification Code is: {{$code}}</p>
 </body>
 </html>
