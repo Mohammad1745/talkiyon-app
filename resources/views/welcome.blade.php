@@ -35,7 +35,7 @@
 
                     <div class="ml-6">
                         <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                            A tool to build you future
+                            A tool to accelerate your future
                         </div>
                     </div>
                 </div>
