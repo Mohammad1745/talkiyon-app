@@ -17,3 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/clear-users-table', function (Request $request) {
+    try {
+        \App\Models\User::where('role', STUDENT_ROLE)->delete();
+        return [
+            'success' => true,
+            'message' => 'User table has been cleared'
+        ];
+    } catch (Exception $exception) {
+        return [
+            'success' => true,
+            'message' => $exception->getMessage()
+        ];
+    }
+});
