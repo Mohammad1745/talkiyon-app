@@ -47,12 +47,13 @@ class AuthService extends ResponseService
         try {
             DB::beginTransaction();
             $randNo = randomNumber(6);
-            $user  = $this->userService->create($this->userService->userDataFormatter($request->all(),$randNo));
+            $user = $this->userService->create($this->userService->userDataFormatter($request->all(),$randNo));
             $this->studentInfoService->create($this->studentInfoService->studentInfoDataFormatter($user->id, $request->all()));
             $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
+            $authorization = $this->_authorize($user);
             DB::commit();
 
-            return $this->response($this->_authData($user))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
+            return $this->response($this->_authData($user, $authorization))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
         } catch (\Exception $exception) {
             DB::rollBack();
 
@@ -67,11 +68,16 @@ class AuthService extends ResponseService
     public function loginProcess(object $request): array
     {
         try {
+            DB::beginTransaction();
             if(Auth::attempt($this->_credentials($request->only('email', 'password')))){
                 $user = Auth::user();
+                $authorization = $this->_authorize($user);
+                DB::commit();
 
-                return $this->response($this->_authData($user))->success('Logged In Successfully. '.(!$user->is_email_verified ? 'Please verify your email' : ''));
+                return $this->response($this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_email_verified ? 'Please verify your email' : ''));
             } else {
+                DB::rollBack();
+
                 return $this->response()->error('Wrong Email Or Password');
             }
         } catch (\Exception $exception) {
@@ -220,13 +226,23 @@ class AuthService extends ResponseService
      * @param object $user
      * @return array
      */
-    private function _authData(object $user): array
+    private function _authorize(object $user): array
     {
         return [
-            'authorization' => [
-                'token' =>  $user->createToken('Talkiyon')->accessToken,
-                'token_type' =>  'Bearer'
-            ],
+            'token' =>  $user->createToken('Talkiyon')->accessToken,
+            'token_type' =>  'Bearer'
+        ];
+    }
+
+    /**
+     * @param object $user
+     * @param array $authorization
+     * @return array
+     */
+    private function _authData(object $user, array $authorization): array
+    {
+        return [
+            'authorization' => $authorization,
             'user_info' => [
                 'first_name' => $user->first_name,
                 'last_name' => $user->last_name,
