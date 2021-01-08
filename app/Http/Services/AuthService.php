@@ -46,10 +46,10 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            $randNo = randomNumber(6);
+            $randNo = '123456';//randomNumber(6);//TODO:restore
             $user  = $this->userService->create($this->userService->userDataFormatter($request->all(),$randNo));
             $this->studentInfoService->create($this->studentInfoService->studentInfoDataFormatter($user->id, $request->all()));
-            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
+//            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);  TODO:restore
             DB::commit();
 
             return $this->response($this->_authData($user))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
@@ -86,10 +86,10 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            $randNo = randomNumber(6);
+            $randNo = '123456';//randomNumber(6);//TODO:restore
             $user = Auth::user();
             $this->userService->updateWhere(['id' => $user->id], ['email_verification_code' => $randNo]);
-            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
+//            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);  TODO:restore
             DB::commit();
 
             return $this->response()->success(__("Verification Code has been sent to ".$user->email.'.'));
@@ -126,10 +126,10 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            $randNo = randomNumber(6);
+            $randNo = '123456';//randomNumber(6);//TODO:restore
             $user = $this->userService->firstWhere(['email' => $request->email]);
             $this->resetPasswordService->create($this->resetPasswordService->resetPasswordDataFormatter($user->id, $randNo));
-            $this->_resetPasswordCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
+            //$this->_resetPasswordCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);  TODO:restore
             DB::commit();
 
             return $this->response()->success(__("Password Reset Code has been sent to ".$user->email.'.'));
