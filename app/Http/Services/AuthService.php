@@ -6,9 +6,12 @@ namespace App\Http\Services;
 use App\Http\Services\Base\ResetPasswordService;
 use App\Http\Services\Base\StudentInfoService;
 use App\Http\Services\Base\UserService;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Twilio\Exceptions\ConfigurationException;
+use Twilio\Exceptions\TwilioException;
 
 class AuthService extends ResponseService
 {
@@ -46,15 +49,15 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            $randNo = '123456';//randomNumber(6);//TODO:restore
+            $randNo = randomNumber(6);
             $user = $this->userService->create($this->userService->userDataFormatter($request->all(),$randNo));
             $this->studentInfoService->create($this->studentInfoService->studentInfoDataFormatter($user->id, $request->all()));
-//            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);  TODO:restore
+            $this->_phoneVerificationCodeSender($user->first_name.' '.$user->last_name, $user->phone,$randNo);
             $authorization = $this->_authorize($user);
             DB::commit();
 
-            return $this->response($this->_authData($user, $authorization))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to your email."));
-        } catch (\Exception $exception) {
+            return $this->response($this->_authData($user, $authorization))->success(__("Successfully signed up as a ". userRoles($user->role).". Verification Code has been sent to ".$user->phone."."));
+        } catch (Exception $exception) {
             DB::rollBack();
 
             return $this->response()->error($exception->getMessage());
@@ -69,18 +72,57 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            if(Auth::attempt($this->_credentials($request->only('email', 'password')))){
+            if(Auth::attempt($this->_credentials($request->only('phone', 'password')))){
                 $user = Auth::user();
                 $authorization = $this->_authorize($user);
                 DB::commit();
 
-                return $this->response($this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_email_verified ? 'Please verify your email' : ''));
+                return $this->response($this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_phone_verified ? 'Please verify your account' : ''));
             } else {
                 DB::rollBack();
 
                 return $this->response()->error('Wrong Email Or Password');
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
+            return $this->response()->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function resendPhoneVerificationCodeProcess(): array
+    {
+        try {
+            DB::beginTransaction();
+            $randNo = randomNumber(6);
+            $user = Auth::user();
+            $this->userService->updateWhere(['id' => $user->id], ['phone_verification_code' => $randNo]);
+            $this->_phoneVerificationCodeSender($user->first_name.' '.$user->last_name, $user->phone,$randNo);
+            DB::commit();
+
+            return $this->response()->success(__("Verification Code has been sent to ".$user->phone.'.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->response()->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function phoneVerificationProcess(object $request): array
+    {
+        try {
+            if (!(Auth::user()->phone==$request->phone && Auth::user()->phone_verification_code==$request->code)){
+                return $this->response()->error(__('Wrong entry'));
+            }
+            $this->userService->verifyPhone(Auth::id());
+
+            return $this->response()->success(__("Phone Verification Successful."));
+        } catch (Exception $exception) {
             return $this->response()->error($exception->getMessage());
         }
     }
@@ -92,14 +134,14 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            $randNo = '123456';//randomNumber(6);//TODO:restore
+            $randNo = randomNumber(6);
             $user = Auth::user();
             $this->userService->updateWhere(['id' => $user->id], ['email_verification_code' => $randNo]);
-//            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);  TODO:restore
+            $this->_emailVerificationCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);
             DB::commit();
 
             return $this->response()->success(__("Verification Code has been sent to ".$user->email.'.'));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
 
             return $this->response()->error($exception->getMessage());
@@ -119,7 +161,7 @@ class AuthService extends ResponseService
             $this->userService->verifyEmail(Auth::id());
 
             return $this->response()->success(__("Email Successfully Verified."));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->response()->error($exception->getMessage());
         }
     }
@@ -132,14 +174,14 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            $randNo = '123456';//randomNumber(6);//TODO:restore
-            $user = $this->userService->firstWhere(['email' => $request->email]);
+            $randNo = randomNumber(6);
+            $user = $this->userService->firstWhere(['phone' => $request->phone]);
             $this->resetPasswordService->create($this->resetPasswordService->resetPasswordDataFormatter($user->id, $randNo));
-            //$this->_resetPasswordCodeSender($user->first_name.' '.$user->last_name, $user->email,$randNo);  TODO:restore
+            $this->_resetPasswordCodeSender($user->first_name.' '.$user->last_name, $user->phone,$randNo);
             DB::commit();
 
-            return $this->response()->success(__("Password Reset Code has been sent to ".$user->email.'.'));
-        } catch (\Exception $exception) {
+            return $this->response()->success(__("Password Reset Code has been sent to ".$user->phone.'.'));
+        } catch (Exception $exception) {
             DB::rollBack();
 
             return $this->response()->error($exception->getMessage());
@@ -154,7 +196,7 @@ class AuthService extends ResponseService
     {
         try {
             DB::beginTransaction();
-            $user = $this->userService->firstWhere(['email' => $request->email]);
+            $user = $this->userService->firstWhere(['phone' => $request->phone]);
             $passwordReset = $user ? $this->resetPasswordService->firstWhere(['user_id' => $user->id, 'code' => $request->code]) : null;
             if (!$passwordReset){
                 DB::rollBack();
@@ -167,7 +209,7 @@ class AuthService extends ResponseService
 
             return $this->response()->success(__("Password Reset Successful."));
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
 
             return $this->response()->error($exception->getMessage());
@@ -187,9 +229,21 @@ class AuthService extends ResponseService
             } else {
                 return $this->response()->error('Already Logged Out.');
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->response()->error($exception->getMessage());
         }
+    }
+
+    /**
+     * @param string $name
+     * @param string $phone
+     * @param string $code
+     * @throws ConfigurationException
+     * @throws TwilioException
+     */
+    private function _phoneVerificationCodeSender(string $name, string $phone, string $code)
+    {
+        sendSMS('Dear '.$name.', You Verification Code Is :'.$code, '+88'.$phone);
     }
 
     /**
@@ -209,17 +263,14 @@ class AuthService extends ResponseService
 
     /**
      * @param string $name
-     * @param string $email
+     * @param string $phone
      * @param string $code
+     * @throws ConfigurationException
+     * @throws TwilioException
      */
-    private function _resetPasswordCodeSender(string $name, string $email, string $code)
+    private function _resetPasswordCodeSender(string $name, string $phone, string $code)
     {
-        $data = array('name'=> $name, 'code' => $code);
-        Mail::send('email.auth.reset-password', $data, function($message) use ($name, $email) {
-            $message->to($email, $name)
-                ->subject('Reset Password');
-            $message->from('talkiyon@example.com', 'Talkiyon');
-        });
+        sendSMS('Dear '.$name.', You Password Reset Code Is :'.$code, '+88'.$phone);
     }
 
     /**
@@ -248,7 +299,7 @@ class AuthService extends ResponseService
                 'last_name' => $user->last_name,
                 'email' => $user->email,
                 'username' => $user->username,
-                'is_email_verified' => $user->is_email_verified,
+                'is_phone_verified' => $user->is_phone_verified,
                 'role' => $user->role,
             ]
         ];
@@ -259,11 +310,17 @@ class AuthService extends ResponseService
      * @return array
      */
     private function _credentials(array $data) : array {
-        return filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? [
-            'email' => $data['email'],
+        if (isPhone($data['phone'])){
+            return [
+                'phone' => $data['phone'],
+                'password' => $data['password']
+            ];
+        }
+        return filter_var($data['phone'], FILTER_VALIDATE_EMAIL) ? [
+            'email' => $data['phone'],
             'password' => $data['password']
         ] : [
-            'username' => $data['email'],
+            'username' => $data['phone'],
             'password' => $data['password']
         ];
     }

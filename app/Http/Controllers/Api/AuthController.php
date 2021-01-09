@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\EmailVerificationRequest;
 use App\Http\Requests\Api\LoginRequest;
+use App\Http\Requests\Api\PhoneVerificationRequest;
 use App\Http\Requests\Api\ResetPasswordRequest;
 use App\Http\Requests\Api\SendResetPasswordCodeRequest;
 use App\Http\Requests\Api\SignupRequest;
@@ -61,22 +62,22 @@ class AuthController extends Controller
         return response()->json( $this->authService->emailVerificationProcess($request));
     }
 
-//    /**
-//     * @param PhoneVerificationRequest $request
-//     * @return JsonResponse
-//     */
-//    public function phoneVerificationProcess(PhoneVerificationRequest $request) {
-//        $response = $this->authService->phoneVerify($request);
-//        return response()->json($response);
-//    }
-//
-//    /**
-//     * @return JsonResponse
-//     */
-//    public function resendPhoneVerificationCode() {
-//        $response = $this->authService->resendPhoneVerificationCode();
-//        return response()->json($response);
-//    }
+    /**
+     * @return JsonResponse
+     */
+    public function resendPhoneVerificationCode(): JsonResponse
+    {
+        return response()->json( $this->authService->resendPhoneVerificationCodeProcess());
+    }
+
+    /**
+     * @param PhoneVerificationRequest $request
+     * @return JsonResponse
+     */
+    public function phoneVerification(PhoneVerificationRequest $request): JsonResponse
+    {
+        return response()->json( $this->authService->phoneVerificationProcess($request));
+    }
 
     /**
      * @param SendResetPasswordCodeRequest $request
