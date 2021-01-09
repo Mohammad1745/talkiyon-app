@@ -118,6 +118,14 @@ function deleteFile($destinationPath, $file)
 }
 
 /**
+ * @param $subject
+ * @return false|int
+ */
+function isPhone($subject)
+{
+    return preg_match('/^(01){1}[1-9]{1}[0-9]{8}$/', $subject);
+}
+/**
  * @return string
  */
 function logoPath()

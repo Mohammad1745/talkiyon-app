@@ -37,7 +37,7 @@ class UserService extends Service
                 'role' => $request['role'],
                 'gender' => $request['gender'],
                 'status' => USER_PENDING_STATUS,
-                'email_verification_code' => $randNo? $randNo : null,
+                'phone_verification_code' => $randNo? $randNo : null,
             ];
         }
         return [];
@@ -60,5 +60,14 @@ class UserService extends Service
     public function verifyEmail(int $userId)
     {
         return $this->updateWhere(['id' => $userId], ['is_email_verified' => true, 'email_verification_code' => null]);
+    }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function verifyPhone(int $userId)
+    {
+        return $this->updateWhere(['id' => $userId], ['is_phone_verified' => true, 'phone_verification_code' => null]);
     }
 }
