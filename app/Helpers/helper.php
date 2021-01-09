@@ -13,6 +13,9 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Twilio\Exceptions\ConfigurationException;
+use Twilio\Exceptions\TwilioException;
+use Twilio\Rest\Client;
 
 const API_SECRET_KEY = 'EH5m5%$+3V$7Ue4j3*Kc5UzA4Mq7TXEt8a!8^AJ#';
 
@@ -63,6 +66,20 @@ function authUser(): ?Authenticatable
 //    }
 //}
 
+/**
+ * @param string $message
+ * @param string $recipients
+ * @throws ConfigurationException
+ * @throws TwilioException
+ */
+function sendSMS(string $message, string $recipients)
+{
+    $account_sid = getenv("TWILIO_SID");
+    $auth_token = getenv("TWILIO_AUTH_TOKEN");
+    $twilio_number = getenv("TWILIO_NUMBER");
+    $client = new Client($account_sid, $auth_token);
+    $client->messages->create($recipients, ['from' => $twilio_number, 'body' => $message]);
+}
 
 /**
  * @param $file

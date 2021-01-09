@@ -21,5 +21,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 Route::middleware('auth:api')->group(function () {
     Route::get('/resend-email-verification-code', [AuthController::class, 'resendEmailVerificationCode'])->name('api.resendEmailVerificationCode');
     Route::post('/email-verification', [AuthController::class, 'emailVerification'])->name('api.emailVerification');
+    Route::get('/resend-phone-verification-code', [AuthController::class, 'resendPhoneVerificationCode'])->name('api.resendPhoneVerificationCode');
+    Route::post('/phone-verification', [AuthController::class, 'phoneVerification'])->name('api.phoneVerification');
     Route::get('/logout', [AuthController::class, 'logout'])->name('api.logout');
 });
