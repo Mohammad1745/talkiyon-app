@@ -15,7 +15,7 @@ class Repository
      * Repository constructor.
      * @param $model
      */
-    public function __construct($model)
+    public function __construct ($model)
     {
         $this->model = $model;
     }
@@ -23,18 +23,18 @@ class Repository
     /**
      * @return mixed
      */
-    public function all()
+    public function all ()
     {
-        return $this->model->all();
+        return $this->model->all( );
     }
 
     /**
      * @param array $data
      * @return mixed
      */
-    public function create(array $data)
+    public function create (array $data)
     {
-        return $this->model->create($data);
+        return $this->model->create( $data);
     }
 
     /**
@@ -42,9 +42,9 @@ class Repository
      * @param array $data
      * @return mixed
      */
-    public function update(int $id, array $data)
+    public function update (int $id, array $data)
     {
-        return $this->model->where(['id' => $id])->update($data);
+        return $this->model->where( ['id' => $id])->update( $data);
     }
 
     /**
@@ -52,9 +52,9 @@ class Repository
      * @param array $data
      * @return mixed
      */
-    public function updateWhere(array $where, array $data)
+    public function updateWhere (array $where, array $data)
     {
-        return $this->model->where($where)->update($data);
+        return $this->model->where( $where)->update( $data);
     }
 
     /**
@@ -62,70 +62,72 @@ class Repository
      * @param array $data
      * @return mixed
      */
-    public function updateOrCreate(array $where, array $data){
-        return $this->model->updateOrCreate($where,$data);
+    public function updateOrCreate (array $where, array $data)
+    {
+        return $this->model->updateOrCreate( $where, $data);
     }
 
     /**
-     * @param $id
+     *  @param $id
      * @return mixed
      */
-    public function delete(int $id) {
+    public function delete (int $id)
+    {
         return $this->model->where(['id' => $id])->delete();
     }
 
     /**
-     * @param array $where
+     *  @param array $where
      * @return mixed
      */
-    public function deleteWhere(array $where)
+    public function deleteWhere (array $where)
     {
-        return $this->model->where($where)->delete();
+        return $this->model->where( $where)->delete();
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function firstWhere(array $where)
+    public function firstWhere (array $where)
     {
-        return $this->model->where($where)->first();
+        return $this->model->where( $where)->first();
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function lastWhere(array $where)
+    public function lastWhere (array $where)
     {
-        return $this->model->where($where)->orderby('created_at', 'desc')->first();
+        return $this->model->where( $where)->orderby('created_at', 'desc')->first();
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function pluckWhere(array $where)
+    public function pluckWhere (array $where)
     {
-        return $this->model->where($where)->pluck();
+        return $this->model->where( $where)->pluck();
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function getWhere(array $where)
+    public function getWhere (array $where)
     {
-        return $this->model->where($where)->get();
+        return $this->model->where( $where)->get();
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function countWhere(array $where)
+    public function countWhere (array $where)
     {
-        return $this->model->where($where)->count();
+        return $this->model->where( $where)->count();
     }
 
     /**
@@ -133,8 +135,8 @@ class Repository
      * @param string $field
      * @return mixed
      */
-    public function sumWhere(array $where, string $field)
+    public function sumWhere (array $where, string $field)
     {
-        return $this->model->where($where)->sum($field);
+        return $this->model->where( $where)->sum( $field);
     }
 }

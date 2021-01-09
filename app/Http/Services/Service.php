@@ -15,7 +15,7 @@ class Service
      * BaseService constructor.
      * @param $repository
      */
-    public function __construct($repository)
+    public function __construct ($repository)
     {
         $this->repository = $repository;
     }
@@ -23,7 +23,7 @@ class Service
     /**
      * @return mixed
      */
-    public function all()
+    public function all ()
     {
         return $this->repository->all();
     }
@@ -32,9 +32,9 @@ class Service
      * @param array $data
      * @return mixed
      */
-    public function create(array $data)
+    public function create (array $data)
     {
-        return $this->repository->create($data);
+        return $this->repository->create( $data);
     }
 
     /**
@@ -42,9 +42,9 @@ class Service
      * @param array $data
      * @return mixed
      */
-    public function update(int $id, array $data)
+    public function update (int $id, array $data)
     {
-        return $this->repository->update($id, $data);
+        return $this->repository->update( $id, $data);
     }
 
     /**
@@ -52,9 +52,9 @@ class Service
      * @param array $data
      * @return mixed
      */
-    public function updateWhere(array $where, array $data)
+    public function updateWhere (array $where, array $data)
     {
-        return $this->repository->updateWhere($where, $data);
+        return $this->repository->updateWhere( $where, $data);
     }
 
     /**
@@ -62,70 +62,70 @@ class Service
      * @param array $data
      * @return mixed
      */
-    public function updateOrCreate(array $where, array $data){
-        return $this->repository->updateOrCreate($where, $data);
+    public function updateOrCreate (array $where, array $data){
+        return $this->repository->updateOrCreate( $where, $data);
     }
 
     /**
      * @param int $id
      * @return mixed
      */
-    public function delete(int $id) {
-        return $this->repository->delete($id);
+    public function delete (int $id) {
+        return $this->repository->delete( $id);
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function deleteWhere(array $where)
+    public function deleteWhere (array $where)
     {
-        return $this->repository->deleteWhere($where);
+        return $this->repository->deleteWhere( $where);
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function firstWhere(array $where)
+    public function firstWhere (array $where)
     {
-        return $this->repository->firstWhere($where);
+        return $this->repository->firstWhere( $where);
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function lastWhere(array $where)
+    public function lastWhere (array $where)
     {
-        return $this->repository->lastWhere($where);
+        return $this->repository->lastWhere( $where);
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function pluckWhere(array $where)
+    public function pluckWhere (array $where)
     {
-        return $this->repository->pluckWhere($where);
+        return $this->repository->pluckWhere( $where);
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function getWhere(array $where)
+    public function getWhere (array $where)
     {
-        return $this->repository->getWhere($where);
+        return $this->repository->getWhere( $where);
     }
 
     /**
      * @param array $where
      * @return mixed
      */
-    public function countWhere(array $where)
+    public function countWhere (array $where)
     {
-        return $this->repository->countWhere($where);
+        return $this->repository->countWhere( $where);
     }
 
     /**
@@ -133,8 +133,8 @@ class Service
      * @param string $field
      * @return mixed
      */
-    public function sumWhere(array $where, string $field)
+    public function sumWhere (array $where, string $field)
     {
-        return $this->repository->sumWhere($where, $field);
+        return $this->repository->sumWhere( $where, $field);
     }
 }

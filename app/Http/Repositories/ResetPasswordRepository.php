@@ -11,8 +11,8 @@ class ResetPasswordRepository extends Repository
     /**
      * ResetPasswordRepository constructor.
      */
-    public function __construct()
+    public function __construct ()
     {
-        parent::__construct(new ResetPassword());
+        parent::__construct( new ResetPassword());
     }
 }

@@ -13,7 +13,7 @@ class ResetPasswordService extends Service
      * ResetPasswordService constructor.
      * @param ResetPasswordRepository $repository
      */
-    public function __construct(ResetPasswordRepository $repository)
+    public function __construct (ResetPasswordRepository $repository)
     {
         parent::__construct($repository);
     }
@@ -23,7 +23,7 @@ class ResetPasswordService extends Service
      * @param string $randNo
      * @return array
      */
-    public function resetPasswordDataFormatter(int $userId, string $randNo): array
+    public function resetPasswordDataFormatter (int $userId, string $randNo): array
     {
         if($userId){
             return [

@@ -14,9 +14,9 @@ class StudentInfoService extends Service
      * StudentInfoService constructor.
      * @param StudentInfoRepository $repository
      */
-    public function __construct(StudentInfoRepository $repository)
+    public function __construct (StudentInfoRepository $repository)
     {
-        parent::__construct($repository);
+        parent::__construct( $repository);
     }
 
     /**
@@ -24,7 +24,7 @@ class StudentInfoService extends Service
      * @param array $request
      * @return array
      */
-    public function studentInfoDataFormatter(int $userId, array $request): array
+    public function studentInfoDataFormatter (int $userId, array $request): array
     {
         if($request){
             return [
