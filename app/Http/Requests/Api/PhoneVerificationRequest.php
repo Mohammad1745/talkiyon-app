@@ -14,7 +14,6 @@ class PhoneVerificationRequest extends Request
     public function rules ():array
     {
         return [
-            'phone' => 'required|regex: /^(01){1}[1-9]{1}[0-9]{8}$/',
             'code' => 'required'
         ];
     }
