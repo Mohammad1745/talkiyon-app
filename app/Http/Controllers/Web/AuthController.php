@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Requests\Api\LoginRequest;
+use App\Http\Requests\Web\LoginRequest;
 use App\Http\Services\AuthService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
@@ -36,19 +37,27 @@ class AuthController extends Controller
 
     /**
      * @param LoginRequest $request
-     * @return JsonResponse
+     * @return RedirectResponse
      */
-    public function loginProcess (LoginRequest $request): JsonResponse
+    public function loginProcess (LoginRequest $request): RedirectResponse
     {
-        return response()->json( $this->authService->loginProcess( $request));
+        return $this->webResponse( $this->authService->adminLoginProcess( $request), 'dummy');
     }
 
     /**
-     * @return JsonResponse
+     * @return Application|Factory|View
      */
-    public function logout (): JsonResponse
+    public function dummy()
     {
-        return response()->json( $this->authService->logoutProcess());
+        return view('admin.dashboard');
+    }
+
+    /**
+     * @return RedirectResponse
+     */
+    public function logout (): RedirectResponse
+    {
+        return $this->webResponse( $this->authService->webLogoutProcess(), 'login');
     }
 
 
