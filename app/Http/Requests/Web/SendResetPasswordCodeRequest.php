@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Web;
 
 use App\Http\Requests\Request;
 
-class PhoneVerificationRequest extends Request
+class SendResetPasswordCodeRequest extends Request
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +14,7 @@ class PhoneVerificationRequest extends Request
     public function rules ():array
     {
         return [
-            'code' => 'required'
+            'phone' => 'required'
         ];
     }
 }
