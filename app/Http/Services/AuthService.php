@@ -116,7 +116,7 @@ class AuthService extends ResponseService
     public function phoneVerificationProcess (object $request): array
     {
         try {
-            if (!(Auth::user()->phone==$request->phone && Auth::user()->phone_verification_code==$request->code)){
+            if (Auth::user()->phone_verification_code!=$request->code){
                 return $this->response()->error(__('Wrong entry'));
             }
             $this->userService->verifyPhone( Auth::id());
@@ -155,7 +155,7 @@ class AuthService extends ResponseService
     public function emailVerificationProcess (object $request): array
     {
         try {
-            if (!(Auth::user()->email==$request->email && Auth::user()->email_verification_code==$request->code)){
+            if (Auth::user()->email_verification_code!=$request->code){
                 return $this->response()->error(__('Wrong entry'));
             }
             $this->userService->verifyEmail( Auth::id());
@@ -176,6 +176,11 @@ class AuthService extends ResponseService
             DB::beginTransaction();
             $randNo = randomNumber(6);
             $user = $this->userService->firstWhere(['phone' => $request->phone]);
+            if (!$user) {
+                DB::rollBack();
+
+                return $this->response()->error(__('Unknown entry.'));
+            }
             $this->resetPasswordService->create( $this->resetPasswordService->resetPasswordDataFormatter($user->id, $randNo));
             $this->_resetPasswordCodeSender( $user->first_name.' '.$user->last_name, $user->phone,$randNo);
             DB::commit();
