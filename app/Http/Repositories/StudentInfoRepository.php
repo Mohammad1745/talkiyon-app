@@ -11,8 +11,8 @@ class StudentInfoRepository extends Repository
     /**
      * StudentInfoRepository constructor.
      */
-    public function __construct()
+    public function __construct ()
     {
-        parent::__construct(new StudentInfo());
+        parent::__construct( new StudentInfo());
     }
 }

@@ -11,7 +11,7 @@ class SignupRequest extends Request
      *
      * @return array
      */
-    public function rules():array
+    public function rules ():array
     {
         return [
             'first_name' => 'required|string',

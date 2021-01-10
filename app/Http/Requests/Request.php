@@ -14,7 +14,7 @@ class Request extends FormRequest
      *
      * @return bool
      */
-    public function authorize():bool
+    public function authorize ():bool
     {
         return true;
     }
@@ -24,7 +24,7 @@ class Request extends FormRequest
      *
      * @return array
      */
-    public function rules():array
+    public function rules ():array
     {
         return [
             //
@@ -35,7 +35,7 @@ class Request extends FormRequest
      * @param Validator $validator
      * @throws ValidationException
      */
-    protected function failedValidation(Validator $validator) {
+    protected function failedValidation (Validator $validator) {
         $errors = '';
         if ($validator->fails()) {
             $e = $validator->errors()->all();
@@ -48,9 +48,9 @@ class Request extends FormRequest
             'message' => $errors,
             'data' => []
         ];
-        $response = new JsonResponse($json, 200);
+        $response = new JsonResponse( $json, 200);
 
-        throw (new ValidationException($validator, $response))
+        throw (new ValidationException( $validator, $response))
             ->errorBag($this->errorBag)->redirectTo($this->getRedirectUrl());
     }
 }

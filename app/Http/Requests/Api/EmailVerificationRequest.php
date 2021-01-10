@@ -11,7 +11,7 @@ class EmailVerificationRequest extends Request
      *
      * @return array
      */
-    public function rules():array
+    public function rules ():array
     {
         return [
             'email' => 'required',

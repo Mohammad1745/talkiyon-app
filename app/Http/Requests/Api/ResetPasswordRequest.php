@@ -11,7 +11,7 @@ class ResetPasswordRequest extends Request
      *
      * @return array
      */
-    public function rules():array
+    public function rules ():array
     {
         return [
             'phone' => 'required|regex: /^(01){1}[1-9]{1}[0-9]{8}$/',

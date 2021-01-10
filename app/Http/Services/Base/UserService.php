@@ -14,9 +14,9 @@ class UserService extends Service
      * UserService constructor.
      * @param UserRepository $repository
      */
-    public function __construct(UserRepository $repository)
+    public function __construct (UserRepository $repository)
     {
-        parent::__construct($repository);
+        parent::__construct( $repository);
     }
 
     /**
@@ -24,13 +24,13 @@ class UserService extends Service
      * @param $randNo
      * @return array
      */
-    public function userDataFormatter(array $request, string $randNo): array
+    public function userDataFormatter (array $request, string $randNo): array
     {
-        if($request){
+        if ($request){
             return [
                 'email' => $request['email'],
                 'username' => $request['username'],
-                'password' => Hash::make($request['password']),
+                'password' => Hash::make( $request['password']),
                 'phone' => $request['phone'],
                 'first_name' => $request['first_name'],
                 'last_name' => $request['last_name'],
@@ -48,7 +48,7 @@ class UserService extends Service
      * @param string $password
      * @return mixed
      */
-    public function resetPassword(int $userId, string $password)
+    public function resetPassword (int $userId, string $password)
     {
         return $this->updateWhere(['id' => $userId], ['password' => Hash::make($password)]);
     }
@@ -57,7 +57,7 @@ class UserService extends Service
      * @param int $userId
      * @return mixed
      */
-    public function verifyEmail(int $userId)
+    public function verifyEmail (int $userId)
     {
         return $this->updateWhere(['id' => $userId], ['is_email_verified' => true, 'email_verification_code' => null]);
     }
@@ -66,7 +66,7 @@ class UserService extends Service
      * @param int $userId
      * @return mixed
      */
-    public function verifyPhone(int $userId)
+    public function verifyPhone (int $userId)
     {
         return $this->updateWhere(['id' => $userId], ['is_phone_verified' => true, 'phone_verification_code' => null]);
     }

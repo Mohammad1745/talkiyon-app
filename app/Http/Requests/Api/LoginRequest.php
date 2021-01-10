@@ -11,7 +11,7 @@ class LoginRequest extends Request
      *
      * @return array
      */
-    public function rules():array
+    public function rules ():array
     {
         return [
             'phone' => 'required',

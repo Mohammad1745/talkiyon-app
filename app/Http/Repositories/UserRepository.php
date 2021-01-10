@@ -11,8 +11,8 @@ class UserRepository extends Repository
     /**
      * UserRepository constructor.
      */
-    public function __construct()
+    public function __construct ()
     {
-        parent::__construct(new User());
+        parent::__construct( new User());
     }
 }
