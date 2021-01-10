@@ -72,16 +72,21 @@ class AuthService extends ResponseService
     public function loginProcess (object $request, string $requestType='api'): array
     {
         try {
-            DB::beginTransaction();
-            if(Auth::attempt( $this->_credentials( $request->only('phone', 'password')))){
+            if (Auth::attempt( $this->_credentials( $request->only('phone', 'password')))){
                 $user = Auth::user();
-                $authorization = $this->_authorize( $user);
-                DB::commit();
+                if ($requestType=='api'){
+                    $authorization = $this->_authorize( $user);
 
-                return $this->response( $this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_phone_verified ? 'Please verify your account' : ''));
+                    return $this->response( $this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_phone_verified ? 'Please verify your account' : ''));
+                } else {
+                    if ($user->role!=ADMIN_ROLE){
+                        Auth::logout();
+
+                        return $this->response()->error('Not An Admin');
+                    }
+                    return $this->response()->success('Logged In Successfully.');
+                }
             } else {
-                DB::rollBack();
-
                 return $this->response()->error('Wrong Email Or Password');
             }
         } catch (Exception $exception) {
@@ -97,7 +102,7 @@ class AuthService extends ResponseService
     {
         try {
             if(Auth::attempt( $this->_credentials( $request->only('phone', 'password')))){
-                return $this->response()->success('Logged In Successfully.');
+
             } else {
                 return $this->response()->error('Wrong Email Or Password');
             }
