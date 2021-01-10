@@ -66,9 +66,10 @@ class AuthService extends ResponseService
 
     /**
      * @param object $request
+     * @param string $requestType
      * @return array
      */
-    public function loginProcess (object $request): array
+    public function loginProcess (object $request, string $requestType='api'): array
     {
         try {
             DB::beginTransaction();
@@ -239,31 +240,16 @@ class AuthService extends ResponseService
     }
 
     /**
+     * @param string $requestType
      * @return array
      */
-    public function logoutProcess(): array
+    public function logoutProcess(string $requestType='api'): array
     {
         try {
             if(Auth::user()){
-                Auth::user()->token()->revoke();
-
-                return $this->response()->success('Logged Out Successfully');
-            } else {
-                return $this->response()->error('Already Logged Out.');
-            }
-        } catch (Exception $exception) {
-            return $this->response()->error( $exception->getMessage());
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function webLogoutProcess(): array
-    {
-        try {
-            if(Auth::user()){
-                Auth::logout();
+                $requestType=='api' ?
+                    Auth::user()->token()->revoke() :
+                    Auth::logout();
 
                 return $this->response()->success('Logged Out Successfully');
             } else {

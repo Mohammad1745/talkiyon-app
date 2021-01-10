@@ -57,7 +57,7 @@ class AuthController extends Controller
      */
     public function logout (): RedirectResponse
     {
-        return $this->webResponse( $this->authService->webLogoutProcess(), 'login');
+        return $this->webResponse( $this->authService->logoutProcess('web'), 'login');
     }
 
 
