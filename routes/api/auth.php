@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/signup', [AuthController::class, 'signup'])->name('api.signup');
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 Route::post('/send-reset-password-code', [AuthController::class, 'sendResetPasswordCode'])->name('api.sendResetPasswordCode');
+Route::post('/check-reset-password-code', [AuthController::class, 'checkResetPasswordCode'])->name('api.checkResetPasswordCode');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('api.resetPassword');
 Route::middleware('auth:api')->group(function () {
 //    Route::get('/resend-email-verification-code', [AuthController::class, 'resendEmailVerificationCode'])->name('api.resendEmailVerificationCode');

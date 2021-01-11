@@ -66,21 +66,27 @@ class AuthService extends ResponseService
 
     /**
      * @param object $request
+     * @param string $requestType
      * @return array
      */
-    public function loginProcess (object $request): array
+    public function loginProcess (object $request, string $requestType='api'): array
     {
         try {
-            DB::beginTransaction();
-            if(Auth::attempt( $this->_credentials( $request->only('phone', 'password')))){
+            if (Auth::attempt( $this->_credentials( $request->only('phone', 'password')))){
                 $user = Auth::user();
-                $authorization = $this->_authorize( $user);
-                DB::commit();
+                if ($requestType=='api'){
+                    $authorization = $this->_authorize( $user);
 
-                return $this->response( $this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_phone_verified ? 'Please verify your account' : ''));
+                    return $this->response( $this->_authData($user, $authorization))->success('Logged In Successfully. '.(!$user->is_phone_verified ? 'Please verify your account' : ''));
+                } else {
+                    if ($user->role!=ADMIN_ROLE){
+                        Auth::logout();
+
+                        return $this->response()->error('Not An Admin');
+                    }
+                    return $this->response()->success('Logged In Successfully.');
+                }
             } else {
-                DB::rollBack();
-
                 return $this->response()->error('Wrong Email Or Password');
             }
         } catch (Exception $exception) {
@@ -96,7 +102,7 @@ class AuthService extends ResponseService
     {
         try {
             if(Auth::attempt( $this->_credentials( $request->only('phone', 'password')))){
-                return $this->response()->success('Logged In Successfully.');
+
             } else {
                 return $this->response()->error('Wrong Email Or Password');
             }
@@ -214,6 +220,24 @@ class AuthService extends ResponseService
      * @param object $request
      * @return array
      */
+    public function checkResetPasswordCodeProcess (object $request): array
+    {
+        try {
+            $user = $this->userService->firstWhere(['phone' => $request->phone]);
+            $passwordReset = $user ? $this->resetPasswordService->firstWhere(['user_id' => $user->id, 'code' => $request->code]) : null;
+            if (!$passwordReset){
+                return $this->response()->error(__('Wrong Code'));
+            }
+            return $this->response()->success(__("Code Matched."));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
     public function resetPasswordProcess (object $request): array
     {
         try {
@@ -239,31 +263,16 @@ class AuthService extends ResponseService
     }
 
     /**
+     * @param string $requestType
      * @return array
      */
-    public function logoutProcess(): array
+    public function logoutProcess(string $requestType='api'): array
     {
         try {
             if(Auth::user()){
-                Auth::user()->token()->revoke();
-
-                return $this->response()->success('Logged Out Successfully');
-            } else {
-                return $this->response()->error('Already Logged Out.');
-            }
-        } catch (Exception $exception) {
-            return $this->response()->error( $exception->getMessage());
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function webLogoutProcess(): array
-    {
-        try {
-            if(Auth::user()){
-                Auth::logout();
+                $requestType=='api' ?
+                    Auth::user()->token()->revoke() :
+                    Auth::logout();
 
                 return $this->response()->success('Logged Out Successfully');
             } else {

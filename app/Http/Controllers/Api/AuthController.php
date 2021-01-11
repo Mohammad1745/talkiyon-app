@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\CheckResetPasswordCodeRequest;
 use App\Http\Requests\Api\EmailVerificationRequest;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\PhoneVerificationRequest;
@@ -87,6 +88,15 @@ class AuthController extends Controller
     public function sendResetPasswordCode (SendResetPasswordCodeRequest $request): JsonResponse
     {
         return response()->json( $this->authService->sendResetPasswordCodeProcess( $request));
+    }
+
+    /**
+     * @param CheckResetPasswordCodeRequest $request
+     * @return JsonResponse
+     */
+    public function checkResetPasswordCode (CheckResetPasswordCodeRequest $request): JsonResponse
+    {
+        return response()->json( $this->authService->checkResetPasswordCodeProcess( $request));
     }
 
     /**

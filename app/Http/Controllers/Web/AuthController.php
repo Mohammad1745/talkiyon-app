@@ -41,7 +41,7 @@ class AuthController extends Controller
      */
     public function loginProcess (LoginRequest $request): RedirectResponse
     {
-        return $this->webResponse( $this->authService->adminLoginProcess( $request), 'dummy');
+        return $this->webResponse( $this->authService->loginProcess( $request, 'web'), 'dummy');
     }
 
     /**
@@ -57,7 +57,7 @@ class AuthController extends Controller
      */
     public function logout (): RedirectResponse
     {
-        return $this->webResponse( $this->authService->webLogoutProcess(), 'login');
+        return $this->webResponse( $this->authService->logoutProcess('web'), 'login');
     }
 
 
