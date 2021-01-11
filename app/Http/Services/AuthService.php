@@ -220,6 +220,24 @@ class AuthService extends ResponseService
      * @param object $request
      * @return array
      */
+    public function checkResetPasswordCodeProcess (object $request): array
+    {
+        try {
+            $user = $this->userService->firstWhere(['phone' => $request->phone]);
+            $passwordReset = $user ? $this->resetPasswordService->firstWhere(['user_id' => $user->id, 'code' => $request->code]) : null;
+            if (!$passwordReset){
+                return $this->response()->error(__('Wrong Code'));
+            }
+            return $this->response()->success(__("Code Matched."));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
     public function resetPasswordProcess (object $request): array
     {
         try {
