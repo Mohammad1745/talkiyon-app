@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Requests\Web\LoginRequest;
+use App\Http\Requests\Web\ResetPasswordRequest;
+use App\Http\Requests\Web\SendResetPasswordCodeRequest;
 use App\Http\Services\AuthService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -42,6 +44,40 @@ class AuthController extends Controller
     public function loginProcess (LoginRequest $request): RedirectResponse
     {
         return $this->webResponse( $this->authService->loginProcess( $request, 'web'), 'dummy');
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function sendResetPasswordCode ()
+    {
+        return view('auth.send-reset-password-code');
+    }
+
+    /**
+     * @param SendResetPasswordCodeRequest $request
+     * @return RedirectResponse
+     */
+    public function sendResetPasswordCodeProcess (SendResetPasswordCodeRequest $request): RedirectResponse
+    {
+        return $this->webResponse( $this->authService->sendResetPasswordCodeProcess( $request), 'resetPassword');
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function resetPassword ()
+    {
+        return view('auth.reset-password');
+    }
+
+    /**
+     * @param ResetPasswordRequest $request
+     * @return RedirectResponse
+     */
+    public function resetPasswordProcess (ResetPasswordRequest $request): RedirectResponse
+    {
+        return $this->webResponse( $this->authService->resetPasswordProcess( $request), 'login');
     }
 
     /**
