@@ -1,5 +1,5 @@
 @extends('layouts.auth')
-@section('title', 'Login - Talkiyon Admin')
+@section('title', 'Reset Password - Talkiyon Admin')
 @section('style')
     <link rel="stylesheet" href="{{asset('assets/css/login.css')}}">
 @endsection
@@ -12,14 +12,16 @@
         <div class="limiter">
             <div class="container-login100">
                 <div class="wrap-login100 p-l-20 p-r-20 p-t-40 p-b-50">
-                    {{Form::open(['route' => 'loginProcess', 'class' => 'login100-form validate-form'])}}
-                        <span class="login100-form-title p-b-33">
-                            Admin Login
-                        </span>
-
+                    {{Form::open(['route' => 'resetPasswordProcess', 'class' => 'login100-form validate-form'])}}
                         <div class="wrap-input100 validate-input"
                              data-validate="Valid email is required: ex@abc.xyz">
-                            <input class="input100" type="text" name="phone" placeholder="Phone / Email / Username">
+                            <input class="input100" type="text" name="phone" placeholder="Phone">
+                            <span class="focus-input100-1"></span>
+                            <span class="focus-input100-2"></span>
+                        </div>
+
+                        <div class="wrap-input100 validate-input">
+                            <input class="input100" type="text" name="code" placeholder="xxxxxx">
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
@@ -30,23 +32,19 @@
                             <span class="focus-input100-2"></span>
                         </div>
 
+                        <div class="wrap-input100 rs1 validate-input" data-validate="Confirm Password is required">
+                            <input class="input100" type="password" name="confirm_password" placeholder="Password">
+                            <span class="focus-input100-1"></span>
+                            <span class="focus-input100-2"></span>
+                        </div>
+
                         <div class="container-login100-form-btn m-t-20">
                             <button class="login100-form-btn">
-                                Sign in
+                                Confirm
                             </button>
                         </div>
 
-                        <div class="text-center p-t-30 p-b-4">
-                                <span class="txt1">
-                                    Forgot
-                                </span>
-
-                            <a href="{{route('sendResetPasswordCode')}}" class="txt2 hov1">
-                                Password?
-                            </a>
-                        </div>
-
-                        <div class="text-center p-b-4">
+                        <div class="text-center p-b-4 m-t-20">
                                 <span class="txt1">
                                     Are you a
                                 </span>

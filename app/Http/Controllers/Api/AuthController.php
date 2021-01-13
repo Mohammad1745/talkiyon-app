@@ -9,7 +9,7 @@ use App\Http\Requests\Api\PhoneVerificationRequest;
 use App\Http\Requests\Api\ResetPasswordRequest;
 use App\Http\Requests\Api\SendResetPasswordCodeRequest;
 use App\Http\Requests\Api\SignupRequest;
-use App\Http\Services\AuthService;
+use App\Http\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 
@@ -18,7 +18,7 @@ class AuthController extends Controller
     /**
      * @var AuthService
      */
-    private $authService;
+    private $service;
 
     /**
      * AuthController constructor.
@@ -26,7 +26,7 @@ class AuthController extends Controller
      */
     public function __construct (AuthService $service)
     {
-        $this->authService = $service;
+        $this->service = $service;
     }
 
     /**
@@ -35,7 +35,7 @@ class AuthController extends Controller
      */
     public function signup (SignupRequest $request): JsonResponse
     {
-        return response()->json( $this->authService->signupProcess( $request));
+        return response()->json( $this->service->signupProcess( $request));
     }
 
     /**
@@ -44,7 +44,7 @@ class AuthController extends Controller
      */
     public function login (LoginRequest $request): JsonResponse
     {
-        return response()->json( $this->authService->loginProcess( $request));
+        return response()->json( $this->service->loginProcess( $request));
     }
 
     /**
@@ -52,7 +52,7 @@ class AuthController extends Controller
      */
     public function resendEmailVerificationCode (): JsonResponse
     {
-        return response()->json( $this->authService->resendEmailVerificationCodeProcess());
+        return response()->json( $this->service->resendEmailVerificationCodeProcess());
     }
 
     /**
@@ -61,7 +61,7 @@ class AuthController extends Controller
      */
     public function emailVerification (EmailVerificationRequest $request): JsonResponse
     {
-        return response()->json( $this->authService->emailVerificationProcess( $request));
+        return response()->json( $this->service->emailVerificationProcess( $request));
     }
 
     /**
@@ -69,7 +69,7 @@ class AuthController extends Controller
      */
     public function resendPhoneVerificationCode (): JsonResponse
     {
-        return response()->json( $this->authService->resendPhoneVerificationCodeProcess());
+        return response()->json( $this->service->resendPhoneVerificationCodeProcess());
     }
 
     /**
@@ -78,7 +78,7 @@ class AuthController extends Controller
      */
     public function phoneVerification (PhoneVerificationRequest $request): JsonResponse
     {
-        return response()->json( $this->authService->phoneVerificationProcess( $request));
+        return response()->json( $this->service->phoneVerificationProcess( $request));
     }
 
     /**
@@ -87,7 +87,7 @@ class AuthController extends Controller
      */
     public function sendResetPasswordCode (SendResetPasswordCodeRequest $request): JsonResponse
     {
-        return response()->json( $this->authService->sendResetPasswordCodeProcess( $request));
+        return response()->json( $this->service->sendResetPasswordCodeProcess( $request));
     }
 
     /**
@@ -96,7 +96,7 @@ class AuthController extends Controller
      */
     public function checkResetPasswordCode (CheckResetPasswordCodeRequest $request): JsonResponse
     {
-        return response()->json( $this->authService->checkResetPasswordCodeProcess( $request));
+        return response()->json( $this->service->checkResetPasswordCodeProcess( $request));
     }
 
     /**
@@ -105,7 +105,7 @@ class AuthController extends Controller
      */
     public function resetPassword (ResetPasswordRequest $request): JsonResponse
     {
-        return response()->json( $this->authService->resetPasswordProcess( $request));
+        return response()->json( $this->service->resetPasswordProcess( $request));
     }
 
     /**
@@ -113,7 +113,7 @@ class AuthController extends Controller
      */
     public function logout (): JsonResponse
     {
-        return response()->json( $this->authService->logoutProcess());
+        return response()->json( $this->service->logoutProcess());
     }
 
 

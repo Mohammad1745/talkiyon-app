@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login-process', [AuthController::class, 'loginProcess'])->name('loginProcess');
+Route::get('/send-reset-password-code', [AuthController::class, 'sendResetPasswordCode'])->name('sendResetPasswordCode');
+Route::post('/send-reset-password-code-process', [AuthController::class, 'sendResetPasswordCodeProcess'])->name('sendResetPasswordCodeProcess');
+Route::get('/reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
+Route::post('/reset-password-process', [AuthController::class, 'resetPasswordProcess'])->name('resetPasswordProcess');
 Route::get('/dummy', [AuthController::class, 'dummy'])->name('dummy');
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
