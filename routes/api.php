@@ -18,12 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/clear-users-table', function (Request $request) {
+Route::post('/delete-user-from-table', function (Request $request) {
     try {
-        \App\Models\User::where('role', STUDENT_ROLE)->delete();
+        \App\Models\User::where('role', '!=', ADMIN_ROLE)->where('phone', $request->phone)->delete();
         return [
             'success' => true,
-            'message' => 'User table has been cleared'
+            'message' => 'User has been deleted'
         ];
     } catch (Exception $exception) {
         return [
