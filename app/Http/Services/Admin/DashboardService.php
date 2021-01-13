@@ -36,8 +36,8 @@ class DashboardService extends ResponseService
     public function content (): array
     {
         try {
-            $data['student_count'] = 123;//$this->userService->countWhere(['role' => STUDENT_ROLE]);
-            $data['teacher_count'] = 12;//$this->userService->countWhere(['role' => TEACHER_ROLE]);
+            $data['student_count'] = $this->userService->countWhere(['role' => STUDENT_ROLE]);
+            $data['teacher_count'] = $this->userService->countWhere(['role' => TEACHER_ROLE]);
 
             return $this->response($data)->success();
         } catch (Exception $exception) {
