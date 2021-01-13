@@ -29,4 +29,19 @@ class DashboardService extends ResponseService
     {
         $this->userService = $userService;
     }
+
+    /**
+     * @return array
+     */
+    public function content (): array
+    {
+        try {
+            $data['student_count'] = 123;//$this->userService->countWhere(['role' => STUDENT_ROLE]);
+            $data['teacher_count'] = 12;//$this->userService->countWhere(['role' => TEACHER_ROLE]);
+
+            return $this->response($data)->success();
+        } catch (Exception $exception) {
+            return $this->response()->error($exception->getMessage());
+        }
+    }
 }

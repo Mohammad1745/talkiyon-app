@@ -7,6 +7,7 @@ use App\Http\Services\Admin\DashboardService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
 {
@@ -27,8 +28,16 @@ class DashboardController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function dashboard()
+    public function dashboard ()
     {
         return view('admin.dashboard');
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function content (): JsonResponse
+    {
+        return response()->json($this->service->content());
     }
 }
