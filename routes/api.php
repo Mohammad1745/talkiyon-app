@@ -20,14 +20,27 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/delete-user-from-table', function (Request $request) {
     try {
-        \App\Models\User::where('role', '!=', ADMIN_ROLE)->where('phone', $request->phone)->delete();
+        if (!$request->phone){
+            return [
+                'success' => false,
+                'message' => 'Phone field is required'
+            ];
+        }
+        $user = \App\Models\User::where('role', '!=', ADMIN_ROLE)->where('phone', $request->phone)->first();
+        if (!$user) {
+            return [
+                'success' => false,
+                'message' => 'Phone does not exist'
+            ];
+        }
+        $user->delete();
         return [
             'success' => true,
             'message' => 'User has been deleted'
         ];
     } catch (Exception $exception) {
         return [
-            'success' => true,
+            'success' => false,
             'message' => $exception->getMessage()
         ];
     }
