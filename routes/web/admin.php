@@ -13,5 +13,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//Dashboard
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/dashboard-content', [DashboardController::class, 'content'])->name('admin.dashboard.content');
