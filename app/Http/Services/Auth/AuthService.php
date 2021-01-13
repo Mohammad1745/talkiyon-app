@@ -1,11 +1,12 @@
 <?php
 
 
-namespace App\Http\Services;
+namespace App\Http\Services\Auth;
 
 use App\Http\Services\Base\ResetPasswordService;
 use App\Http\Services\Base\StudentInfoService;
 use App\Http\Services\Base\UserService;
+use App\Http\Services\ResponseService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

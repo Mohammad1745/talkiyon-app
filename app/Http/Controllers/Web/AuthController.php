@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Web;
 use App\Http\Requests\Web\LoginRequest;
 use App\Http\Requests\Web\ResetPasswordRequest;
 use App\Http\Requests\Web\SendResetPasswordCodeRequest;
-use App\Http\Services\AuthService;
+use App\Http\Services\Auth\AuthService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 
@@ -18,7 +17,7 @@ class AuthController extends Controller
     /**
      * @var AuthService
      */
-    private $authService;
+    private $service;
 
     /**
      * AuthController constructor.
@@ -26,7 +25,7 @@ class AuthController extends Controller
      */
     public function __construct (AuthService $service)
     {
-        $this->authService = $service;
+        $this->service = $service;
     }
 
     /**
@@ -43,7 +42,7 @@ class AuthController extends Controller
      */
     public function loginProcess (LoginRequest $request): RedirectResponse
     {
-        return $this->webResponse( $this->authService->loginProcess( $request, 'web'), 'dummy');
+        return $this->webResponse( $this->service->loginProcess( $request, 'web'), 'admin.dashboard');
     }
 
     /**
@@ -60,7 +59,7 @@ class AuthController extends Controller
      */
     public function sendResetPasswordCodeProcess (SendResetPasswordCodeRequest $request): RedirectResponse
     {
-        return $this->webResponse( $this->authService->sendResetPasswordCodeProcess( $request), 'resetPassword');
+        return $this->webResponse( $this->service->sendResetPasswordCodeProcess( $request), 'resetPassword');
     }
 
     /**
@@ -77,15 +76,7 @@ class AuthController extends Controller
      */
     public function resetPasswordProcess (ResetPasswordRequest $request): RedirectResponse
     {
-        return $this->webResponse( $this->authService->resetPasswordProcess( $request), 'login');
-    }
-
-    /**
-     * @return Application|Factory|View
-     */
-    public function dummy()
-    {
-        return view('admin.dashboard');
+        return $this->webResponse( $this->service->resetPasswordProcess( $request), 'login');
     }
 
     /**
@@ -93,7 +84,7 @@ class AuthController extends Controller
      */
     public function logout (): RedirectResponse
     {
-        return $this->webResponse( $this->authService->logoutProcess('web'), 'login');
+        return $this->webResponse( $this->service->logoutProcess('web'), 'login');
     }
 
 
