@@ -4,19 +4,20 @@
 namespace App\Http\Services\Base;
 
 
+use App\Http\Repositories\StudentInfoRepository;
 use App\Http\Services\Service;
 
 class TeacherInfoService extends Service
 {
 
-//    /**
-//     * TeacherInfoService constructor.
-//     * @param TeacherInfoRepository $repository
-//     */
-//    public function __construct (TeacherInfoRepository $repository)
-//    {
-//        parent::__construct( $repository);
-//    }
+    /**
+     * TeacherInfoService constructor.
+     * @param StudentInfoRepository $repository
+     */
+    public function __construct (StudentInfoRepository $repository)
+    {
+        parent::__construct( $repository);
+    }
 
     /**
      * @param int $userId
