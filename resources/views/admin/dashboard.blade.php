@@ -1,5 +1,8 @@
 @extends('layouts.admin')
 @section('title', 'Dashboard - Talkiyon Admin')
+@section('style')
+    <link rel="stylesheet" href="{{asset('assets/plugins/clock/clock.css')}}">
+@endsection
 @section('content')
     <div class="row p-3">
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 p-3">
@@ -17,11 +20,19 @@
             </div>
         </div>
     </div>
+    <div>
+        <div id="date" class="date"></div>
+        <div id="time" class="time"></div>
+    </div>
+
+
 @endsection
 @section('script')
-    <script src="{{asset('assets/plugins/js/counter.js')}}"></script>
+    <script src="{{asset('assets/plugins/counter_effect/counter_effect.js')}}"></script>
+    <script src="{{asset('assets/plugins/clock/clock.js')}}"></script>
     <script>
         $(document).ready (function () {
+            clock.display('date', 'time');
             $.ajax ({
                 url: '{{route('admin.dashboard.content')}}',
                 type: 'GET'
@@ -29,7 +40,7 @@
                 if (response.success) {
                     $('#student_counter').html(response.data.student_count);
                     $('#teacher_counter').html(response.data.teacher_count);
-                    counter('.count');
+                    counterEffect('.count');
                 } else {
                     console.log(response.message);
                 }
