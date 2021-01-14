@@ -5,6 +5,7 @@ namespace App\Http\Services\Auth;
 
 use App\Http\Services\Base\ResetPasswordService;
 use App\Http\Services\Base\StudentInfoService;
+use App\Http\Services\Base\TeacherInfoService;
 use App\Http\Services\Base\UserService;
 use App\Http\Services\ResponseService;
 use Exception;
@@ -28,18 +29,24 @@ class AuthService extends ResponseService
      * @var StudentInfoService
      */
     private $studentInfoService;
+    /**
+     * @var TeacherInfoService
+     */
+    private $teacherInfoService;
 
     /**
      * AuthService constructor.
      * @param UserService $userService
      * @param StudentInfoService $studentInfoService
+     * @param TeacherInfoService $teacherInfoService
      * @param ResetPasswordService $resetPasswordService
      */
-    public function __construct (UserService $userService, StudentInfoService $studentInfoService, ResetPasswordService $resetPasswordService)
+    public function __construct (UserService $userService, StudentInfoService $studentInfoService, TeacherInfoService $teacherInfoService, ResetPasswordService $resetPasswordService)
     {
         $this->userService = $userService;
         $this->resetPasswordService = $resetPasswordService;
         $this->studentInfoService = $studentInfoService;
+        $this->teacherInfoService = $teacherInfoService;
     }
 
     /**
@@ -52,7 +59,9 @@ class AuthService extends ResponseService
             DB::beginTransaction();
             $randNo = randomNumber(6);
             $user = $this->userService->create( $this->userService->userDataFormatter( $request->all(),$randNo));
-            $this->studentInfoService->create( $this->studentInfoService->studentInfoDataFormatter( $user->id, $request->all()));
+            $user->role==STUDENT_ROLE ?
+                $this->studentInfoService->create( $this->studentInfoService->studentInfoDataFormatter( $user->id, $request->all())):
+                $this->teacherInfoService->create( $this->teacherInfoService->teacherInfoDataFormatter( $user->id, $request->all()));
             $this->_phoneVerificationCodeSender( $user->first_name.' '.$user->last_name, $user->phone,$randNo);
             $authorization = $this->_authorize( $user);
             DB::commit();
