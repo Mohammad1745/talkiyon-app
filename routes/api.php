@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 //Dev Purpose API
+Route::middleware('auth:api')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return response()->json(['success' => true, 'message' => 'Authorized']);
+    });
+});
 Route::post('/delete-user-from-table', function (Request $request) {
     try {
         if (!$request->phone){
