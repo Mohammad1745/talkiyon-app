@@ -1,4 +1,4 @@
-function counter (target) {
+function counterEffect (target) {
     $(target).each(function () {
         $(this).prop('Counter',0).animate({
             Counter: $(this).text()
