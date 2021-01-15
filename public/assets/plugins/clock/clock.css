@@ -1,22 +1,24 @@
-.time {
+.clock {
     position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Nunito', sans-serif;
-    font-size: 8vw;
+    top: 100%;
+    left: 100%;
+    transform: translate(-100%, -100%);
+}
+.time {
+    font-family: 'Orbitron', sans-serif;
+    font-size:8vw;
     font-weight: bolder;
-    color: rgba(128, 128, 128, .3);
+    color: rgba(128, 128, 128, .5);
     user-select: none;
+    -webkit-text-stroke: 1px #fff;
+    margin-left: auto;
 }
 .date {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     font-size: 10vw;
     font-weight: bolder;
-    color: rgba(128, 128, 128, .3);
+    color: rgba(128, 128, 128, .5);
     user-select: none;
+    -webkit-text-stroke: 1px #fff;
+    margin: 5px auto;
 }
