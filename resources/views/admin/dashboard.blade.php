@@ -20,9 +20,9 @@
             </div>
         </div>
     </div>
-    <div>
-        <div id="date" class="date"></div>
+    <div class="clock">
         <div id="time" class="time"></div>
+        <div id="date" class="date"></div>
     </div>
 
 

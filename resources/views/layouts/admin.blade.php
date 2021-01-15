@@ -6,6 +6,8 @@
     <title>@yield('title', 'Talkiyon')</title>
     <link rel="icon" href="{{asset('assets/images/icon.png')}}" type="image/x-icon">
 
+    <!-- Font CSS -->
+    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     @yield('style')
