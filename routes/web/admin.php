@@ -15,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 //Dashboard
 Route::prefix('dashboard')->name('dashboard')->group(function () {
-    Route::get('', [DashboardController::class, 'dashboard'])->name('');
+    Route::get('/', [DashboardController::class, 'dashboard'])->name('');
     Route::get('/content', [DashboardController::class, 'content'])->name('.content');
 });
