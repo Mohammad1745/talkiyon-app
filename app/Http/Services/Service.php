@@ -85,38 +85,42 @@ class Service
 
     /**
      * @param array $where
+     * @param array $fields
      * @return mixed
      */
-    public function firstWhere (array $where)
+    public function firstWhere (array $where, array $fields=[])
     {
-        return $this->repository->firstWhere( $where);
+        return $this->repository->firstWhere( $where, $fields);
     }
 
     /**
      * @param array $where
+     * @param array $fields
      * @return mixed
      */
-    public function lastWhere (array $where)
+    public function lastWhere (array $where, array $fields=[])
     {
-        return $this->repository->lastWhere( $where);
+        return $this->repository->lastWhere( $where, $fields);
     }
 
     /**
      * @param array $where
+     * @param string $field
      * @return mixed
      */
-    public function pluckWhere (array $where)
+    public function pluckWhere (array $where, string $field)
     {
-        return $this->repository->pluckWhere( $where);
+        return $this->repository->pluckWhere( $where, $field);
     }
 
     /**
      * @param array $where
+     * @param array $fields
      * @return mixed
      */
-    public function getWhere (array $where)
+    public function getWhere (array $where, array $fields=[])
     {
-        return $this->repository->getWhere( $where);
+        return $this->repository->getWhere( $where, $fields);
     }
 
     /**

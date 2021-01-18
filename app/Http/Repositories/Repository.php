@@ -25,7 +25,7 @@ class Repository
      */
     public function all ()
     {
-        return $this->model->all( );
+        return $this->model->all();
     }
 
     /**
@@ -87,38 +87,48 @@ class Repository
 
     /**
      * @param array $where
+     * @param array $fields
      * @return mixed
      */
-    public function firstWhere (array $where)
+    public function firstWhere (array $where, array $fields=[])
     {
-        return $this->model->where( $where)->first();
+        return count($fields) ?
+            $this->model->select($fields)->where( $where)->first():
+            $this->model->where( $where)->first();
     }
 
     /**
      * @param array $where
+     * @param array $fields
      * @return mixed
      */
-    public function lastWhere (array $where)
+    public function lastWhere (array $where, array $fields=[])
     {
-        return $this->model->where( $where)->orderby('created_at', 'desc')->first();
+        return count($fields) ?
+            $this->model->select($fields)->where( $where)->orderby('created_at', 'desc')->first():
+            $this->model->where( $where)->orderby('created_at', 'desc')->first();
     }
 
     /**
      * @param array $where
+     * @param string $field
      * @return mixed
      */
-    public function pluckWhere (array $where)
+    public function pluckWhere (array $where, string $field)
     {
-        return $this->model->where( $where)->pluck();
+        return $this->model->where( $where)->pluck($field);
     }
 
     /**
      * @param array $where
+     * @param array $fields
      * @return mixed
      */
-    public function getWhere (array $where)
+    public function getWhere (array $where, array $fields=[])
     {
-        return $this->model->where( $where)->get();
+        return count($fields) ?
+            $this->model->select($fields)->where( $where)->get():
+            $this->model->where( $where)->get();
     }
 
     /**

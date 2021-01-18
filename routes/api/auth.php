@@ -14,15 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/signup', [AuthController::class, 'signup'])->name('api.signup');
-Route::post('/login', [AuthController::class, 'login'])->name('api.login');
-Route::post('/send-reset-password-code', [AuthController::class, 'sendResetPasswordCode'])->name('api.sendResetPasswordCode');
-Route::post('/check-reset-password-code', [AuthController::class, 'checkResetPasswordCode'])->name('api.checkResetPasswordCode');
-Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('api.resetPassword');
+Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/send-reset-password-code', [AuthController::class, 'sendResetPasswordCode'])->name('sendResetPasswordCode');
+Route::post('/check-reset-password-code', [AuthController::class, 'checkResetPasswordCode'])->name('checkResetPasswordCode');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
 Route::middleware('auth:api')->group(function () {
-//    Route::get('/resend-email-verification-code', [AuthController::class, 'resendEmailVerificationCode'])->name('api.resendEmailVerificationCode');
-//    Route::post('/email-verification', [AuthController::class, 'emailVerification'])->name('api.emailVerification');
-    Route::get('/resend-phone-verification-code', [AuthController::class, 'resendPhoneVerificationCode'])->name('api.resendPhoneVerificationCode');
-    Route::post('/phone-verification', [AuthController::class, 'phoneVerification'])->name('api.phoneVerification');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('api.logout');
+//    Route::get('/resend-email-verification-code', [AuthController::class, 'resendEmailVerificationCode'])->name('resendEmailVerificationCode');
+//    Route::post('/email-verification', [AuthController::class, 'emailVerification'])->name('emailVerification');
+    Route::get('/resend-phone-verification-code', [AuthController::class, 'resendPhoneVerificationCode'])->name('resendPhoneVerificationCode');
+    Route::post('/phone-verification', [AuthController::class, 'phoneVerification'])->name('phoneVerification');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
