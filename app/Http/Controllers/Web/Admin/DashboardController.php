@@ -38,6 +38,6 @@ class DashboardController extends Controller
      */
     public function content (): JsonResponse
     {
-        return response()->json($this->service->content());
+        return response()->json( $this->service->content());
     }
 }
