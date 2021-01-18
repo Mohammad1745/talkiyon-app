@@ -40,14 +40,22 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             //API Routes
             Route::prefix('api')
+                ->name('api.')
                 ->middleware('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
             Route::prefix('api')
+                ->name('api.')
                 ->middleware('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api/auth.php'));
+
+            Route::prefix('api/student')
+                ->name('api.student.')
+                ->middleware(['auth:api', 'student'])
+                ->namespace($this->namespace)
+                ->group(base_path('routes/api/student.php'));
 
             //Web Routes
             Route::middleware('web')
@@ -58,9 +66,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web/auth.php'));
 
-            Route::middleware(['web', 'auth', 'admin'])
+            Route::prefix('admin')
+                ->name('admin.')
+                ->middleware(['web', 'auth', 'admin'])
                 ->namespace($this->namespace)
-                ->prefix('admin')
                 ->group(base_path('routes/web/admin.php'));
         });
     }

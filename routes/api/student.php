@@ -15,4 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/info', [ProfileController::class, 'info'])->name('info');
+//Profile
+Route::prefix('profile')->name('profile')->group(function () {
 
+});
