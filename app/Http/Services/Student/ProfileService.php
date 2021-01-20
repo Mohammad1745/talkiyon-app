@@ -38,13 +38,13 @@ class ProfileService extends ResponseService
     public function info (): array
     {
         try {
-            $student = $this->userService->firstWhere(['id' => Auth::id()], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'is_phone_verified', 'image'])->toArray();
+            $student = $this->userService->firstWhere(['id' => Auth::id()], ['first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'is_phone_verified', 'image'])->toArray();
             $student = array_merge($student, $this->studentInfoService->firstWhere(['user_id' => $student], ['date_of_birth', 'introduction', 'about'])->toArray());
             $student['id'] = encrypt($student['id']);
 
-            return $this->response($student)->success();
+            return $this->response( $student)->success();
         } catch (Exception $exception) {
-            return $this->response()->error($exception->getMessage());
+            return $this->response()->error( $exception->getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ class ProfileService extends ResponseService
         } catch (Exception $exception) {
             DB::rollBack();
 
-            return $this->response()->error($exception->getMessage());
+            return $this->response()->error( $exception->getMessage());
         }
     }
 }
