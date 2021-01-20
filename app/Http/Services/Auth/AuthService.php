@@ -50,6 +50,17 @@ class AuthService extends ResponseService
     }
 
     /**
+     * @return array
+     */
+    public function helpers (): array
+    {
+        return $this->response([
+            'roles' => accountTypes(),
+            'genders' => genders()
+        ])->success();
+    }
+
+    /**
      * @param object $request
      * @return array
      */
