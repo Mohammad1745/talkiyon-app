@@ -372,6 +372,25 @@ function accountTypes($input = null)
 
 /**
  * @param null $input
+ * @return array
+ */
+function genders ($input = null)
+{
+    $output = [
+        SEX_MALE => __('Male'),
+        SEX_FEMALE => __('Female'),
+        SEX_OTHER => __('Others'),
+    ];
+
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
+/**
+ * @param null $input
  * @return array|mixed
  */
 function paymentMethods($input = null)

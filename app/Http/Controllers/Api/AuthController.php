@@ -30,6 +30,14 @@ class AuthController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function helpers (): JsonResponse
+    {
+        return response()->json( $this->service->helpers());
+    }
+
+    /**
      * @param SignupRequest $request
      * @return JsonResponse
      */
