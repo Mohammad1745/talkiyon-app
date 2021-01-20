@@ -8,6 +8,7 @@ use App\Http\Services\Base\UserService;
 use App\Http\Services\ResponseService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfileService extends ResponseService
 {
@@ -43,6 +44,26 @@ class ProfileService extends ResponseService
 
             return $this->response($student)->success();
         } catch (Exception $exception) {
+            return $this->response()->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function saveImage (object $request): array
+    {
+        try {
+            DB::beginTransaction();
+            $image = Auth::user()->image;
+            $this->userService->updateWhere(['id' => Auth::id()], ['image' => uploadFile( $request->image, avatarPath(), $image)]);
+            DB::commit();
+
+            return $this->response()->success(__('Image has been '.(!$image ? 'added' : 'updated').' successfully.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
             return $this->response()->error($exception->getMessage());
         }
     }

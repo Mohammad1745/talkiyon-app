@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 //Profile
 Route::prefix('profile')->name('profile')->group(function () {
     Route::get('/info', [ProfileController::class, 'info'])->name('info');
+    Route::post('/save-image', [ProfileController::class, 'saveImage'])->name('saveImage');
 });

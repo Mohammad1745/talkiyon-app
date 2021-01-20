@@ -1,17 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: debu
- * Date: 6/3/19
- * Time: 1:46 PM
- */
 
-use App\Models\AdminSetting;
-use App\Models\StudentSetting;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
