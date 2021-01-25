@@ -22,7 +22,7 @@ class ProfileService extends ResponseService
     private $studentInfoService;
 
     /**
-     * DashboardService constructor.
+     * ProfileService constructor.
      * @param UserService $userService
      * @param StudentInfoService $studentInfoService
      */
