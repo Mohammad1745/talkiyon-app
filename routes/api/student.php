@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Student\ProfileController;
+use App\Http\Controllers\Api\Student\TalkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,4 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('profile')->name('profile')->group(function () {
     Route::get('/info', [ProfileController::class, 'info'])->name('info');
     Route::post('/save-image', [ProfileController::class, 'saveImage'])->name('saveImage');
+});
+//Talk
+Route::prefix('talk')->name('talk')->group(function () {
+    Route::post('/release', [TalkController::class, 'release'])->name('release');
 });
