@@ -116,23 +116,6 @@ class AuthService extends ResponseService
     }
 
     /**
-     * @param object $request
-     * @return array
-     */
-    public function adminLoginProcess (object $request): array
-    {
-        try {
-            if(Auth::attempt( $this->_credentials( $request->only('phone', 'password')))){
-
-            } else {
-                return $this->response()->error('Wrong Email Or Password');
-            }
-        } catch (Exception $exception) {
-            return $this->response()->error( $exception->getMessage());
-        }
-    }
-
-    /**
      * @return array
      */
     public function resendPhoneVerificationCodeProcess (): array
