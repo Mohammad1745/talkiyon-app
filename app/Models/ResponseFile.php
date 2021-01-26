@@ -9,5 +9,5 @@ class ResponseFile extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['response_id', 'type', 'file'];
+    protected $fillable = ['response_id', 'file'];
 }

@@ -4,23 +4,23 @@ namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PresentTalkRequest;
-use App\Http\Services\Student\TimeLineService;
+use App\Http\Services\Student\TimelineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class TimeLineController extends Controller
+class TimelineController extends Controller
 {
 
     /**
-     * @var TimeLineService
+     * @var TimelineService
      */
     protected $service;
 
     /**
-     * TimeLineController constructor.
-     * @param TimeLineService $service
+     * TimelineController constructor.
+     * @param TimelineService $service
      */
-    public function __construct (TimeLineService $service)
+    public function __construct (TimelineService $service)
     {
         $this->service = $service;
     }

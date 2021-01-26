@@ -151,6 +151,22 @@ function documentManualViewPath()
 /**
  * @return string
  */
+function timelinePath()
+{
+    return 'public/timeline/';
+}
+
+/**
+ * @return string
+ */
+function timelineViewPath()
+{
+    return '/storage/timeline/';
+}
+
+/**
+ * @return string
+ */
 function avatarPath()
 {
     return 'public/avatar/';

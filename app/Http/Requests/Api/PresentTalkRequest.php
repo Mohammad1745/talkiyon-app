@@ -17,6 +17,8 @@ class PresentTalkRequest extends Request
             'content' => 'required',
             'type' => 'required|in:'.implode(',',[TALK_TYPE_TALKIYON_OFFICIAL,TALK_TYPE_PUBLIC]),
             'security_type' => 'required|in:'.implode(',',[TALK_SECURITY_TYPE_PUBLIC,TALK_SECURITY_TYPE_SPECIFIC,TALK_SECURITY_TYPE_CONNECTION]),
+            'files' => 'array',
+            'files.*' => $this->file ? 'required' : '',
         ];
     }
 }

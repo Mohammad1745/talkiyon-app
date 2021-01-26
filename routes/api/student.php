@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Student\ProfileController;
-use App\Http\Controllers\Api\Student\TimeLineController;
+use App\Http\Controllers\Api\Student\TimelineController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,5 +22,5 @@ Route::prefix('profile')->name('profile')->group(function () {
 });
 //Talk
 Route::prefix('talk')->name('talk')->group(function () {
-    Route::post('/present', [TimeLineController::class, 'present'])->name('present');
+    Route::post('/present', [TimelineController::class, 'present'])->name('present');
 });
