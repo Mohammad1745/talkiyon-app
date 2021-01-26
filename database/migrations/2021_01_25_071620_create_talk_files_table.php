@@ -16,7 +16,7 @@ class CreateTalkFilesTable extends Migration
         Schema::create('talk_files', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('talk_id');
-            $table->tinyInteger('file_type');
+            $table->tinyInteger('type');
             $table->string('file');
             $table->timestamps();
 

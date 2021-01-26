@@ -9,5 +9,5 @@ class TalkFile extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['talk_id', 'file_type', 'file'];
+    protected $fillable = ['talk_id', 'type', 'file'];
 }

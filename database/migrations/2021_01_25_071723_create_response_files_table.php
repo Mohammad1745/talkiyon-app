@@ -16,7 +16,7 @@ class CreateResponseFilesTable extends Migration
         Schema::create('response_files', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('response_id');
-            $table->tinyInteger('file_type');
+            $table->tinyInteger('type');
             $table->string('file');
             $table->timestamps();
 
