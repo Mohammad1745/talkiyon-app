@@ -39,7 +39,7 @@ class TimeLineService extends ResponseService
         try {
             $this->talkService->create($this->talkService->talkDataFormatter($request->all()));
 
-            return $this->response()->success(__('Talk has been released successfully.'));
+            return $this->response()->success(__('Talk has been presented successfully.'));
         } catch (Exception $exception) {
             return $this->response()->error( $exception->getMessage());
         }

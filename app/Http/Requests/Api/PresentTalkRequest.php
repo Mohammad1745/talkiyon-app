@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use App\Http\Requests\Request;
 
-class ReleaseTalkRequest extends Request
+class PresentTalkRequest extends Request
 {
     /**
      * Get the validation rules that apply to the request.

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ReleaseTalkRequest;
+use App\Http\Requests\Api\PresentTalkRequest;
 use App\Http\Services\Student\TimeLineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,10 +26,10 @@ class TimeLineController extends Controller
     }
 
     /**
-     * @param ReleaseTalkRequest $request
+     * @param PresentTalkRequest $request
      * @return JsonResponse
      */
-    public function present (ReleaseTalkRequest $request): JsonResponse
+    public function present (PresentTalkRequest $request): JsonResponse
     {
         return response()->json( $this->service->present( $request));
     }
