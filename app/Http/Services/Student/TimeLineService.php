@@ -3,26 +3,28 @@
 
 namespace App\Http\Services\Student;
 
+use App\Http\Services\Base\TalkService;
 use App\Http\Services\Base\UserService;
 use App\Http\Services\ResponseService;
+use Exception;
 
-class TalkService extends ResponseService
+class TimeLineService extends ResponseService
 {
     /**
      * @var UserService
      */
     private $userService;
     /**
-     * @var \App\Http\Services\Base\TalkService
+     * @var TalkService
      */
     private $talkService;
 
     /**
-     * TalkService constructor.
+     * TimeLineService constructor.
      * @param UserService $userService
-     * @param \App\Http\Services\Base\TalkService $talkService
+     * @param TalkService $talkService
      */
-    public function __construct (UserService $userService, \App\Http\Services\Base\TalkService $talkService)
+    public function __construct (UserService $userService, TalkService $talkService)
     {
         $this->userService = $userService;
         $this->talkService = $talkService;
@@ -32,13 +34,13 @@ class TalkService extends ResponseService
      * @param object $request
      * @return array
      */
-    public function release (object $request): array
+    public function present (object $request): array
     {
         try {
             $this->talkService->create($this->talkService->talkDataFormatter($request->all()));
 
             return $this->response()->success(__('Talk has been released successfully.'));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->response()->error( $exception->getMessage());
         }
     }

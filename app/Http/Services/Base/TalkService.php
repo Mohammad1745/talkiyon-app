@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class TalkService extends Service
 {
     /**
-     * TalkService constructor.
+     * TimeLineService constructor.
      * @param TalkRepository $repository
      */
     public function __construct (TalkRepository $repository)

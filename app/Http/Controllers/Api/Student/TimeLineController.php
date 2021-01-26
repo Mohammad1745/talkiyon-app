@@ -4,23 +4,23 @@ namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ReleaseTalkRequest;
-use App\Http\Services\Student\TalkService;
+use App\Http\Services\Student\TimeLineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class TalkController extends Controller
+class TimeLineController extends Controller
 {
 
     /**
-     * @var TalkService
+     * @var TimeLineService
      */
     protected $service;
 
     /**
-     * TalkController constructor.
-     * @param TalkService $service
+     * TimeLineController constructor.
+     * @param TimeLineService $service
      */
-    public function __construct (TalkService $service)
+    public function __construct (TimeLineService $service)
     {
         $this->service = $service;
     }
@@ -29,8 +29,8 @@ class TalkController extends Controller
      * @param ReleaseTalkRequest $request
      * @return JsonResponse
      */
-    public function release (ReleaseTalkRequest $request): JsonResponse
+    public function present (ReleaseTalkRequest $request): JsonResponse
     {
-        return response()->json( $this->service->release( $request));
+        return response()->json( $this->service->present( $request));
     }
 }
