@@ -21,14 +21,15 @@ class TalkFileService extends Service
     }
 
     /**
-     * @param $request
+     * @param int $talkId
+     * @param array $request
      * @return array
      */
-    public function talkFileDataFormatter (array $request): array
+    public function talkFileDataFormatter (int $talkId, array $request): array
     {
         if ($request){
             return [
-                'talk_id' => Auth::id(),
+                'talk_id' => $talkId,
                 'file' => $request['file']
             ];
         }

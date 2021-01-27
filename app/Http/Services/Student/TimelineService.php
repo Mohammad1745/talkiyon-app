@@ -8,6 +8,7 @@ use App\Http\Services\Base\TalkService;
 use App\Http\Services\Base\UserService;
 use App\Http\Services\ResponseService;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class TimelineService extends ResponseService
 {
@@ -44,9 +45,9 @@ class TimelineService extends ResponseService
     public function present (object $request): array
     {
         try {
-            $this->talkService->create( $this->talkService->talkDataFormatter($request->all()));
+            $talk = $this->talkService->create( $this->talkService->talkDataFormatter( Auth::id(), $request->all()));
             foreach ($request->all()['files'] as $file) {
-                $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter(['file' => uploadFile( $file, timelinePath())]));
+                $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter( $talk->id, ['file' => uploadFile( $file, timelinePath())]));
             }
 
             return $this->response()->success(__('Talk has been presented successfully.'));

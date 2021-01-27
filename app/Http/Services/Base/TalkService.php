@@ -20,14 +20,15 @@ class TalkService extends Service
     }
 
     /**
-     * @param $request
+     * @param int $userId
+     * @param array $request
      * @return array
      */
-    public function talkDataFormatter (array $request): array
+    public function talkDataFormatter (int $userId, array $request): array
     {
         if ($request){
             return [
-                'user_id' => Auth::id(),
+                'user_id' => $userId,
                 'content' => $request['content'],
                 'parent_id' => isset($request['parent_id']) ? $request['parent_id'] : null,
                 'type' => $request['type'],
