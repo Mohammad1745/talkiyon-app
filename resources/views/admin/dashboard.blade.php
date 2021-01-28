@@ -28,6 +28,7 @@
 
 @endsection
 @section('script')
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script src="{{asset('assets/plugins/counter_effect/counter_effect.js')}}"></script>
     <script src="{{asset('assets/plugins/clock/clock.js')}}"></script>
     <script>
@@ -47,6 +48,19 @@
             }).fail (function (error) {
                 console.log(error);
             });
+        });
+    </script>
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('0fb07f4badd15beb26ce', {
+            cluster: 'ap2'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            $('#student_counter').html(JSON.stringify(data.message));
         });
     </script>
 @endsection
