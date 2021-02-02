@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/auth-helpers', [AuthController::class, 'helpers'])->name('auth.helpers');
+Route::get('/auth/helpers', [AuthController::class, 'helpers'])->name('auth.helpers');
 Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/send-reset-password-code', [AuthController::class, 'sendResetPasswordCode'])->name('sendResetPasswordCode');
