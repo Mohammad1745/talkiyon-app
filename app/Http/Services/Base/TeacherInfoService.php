@@ -32,6 +32,6 @@ class TeacherInfoService extends Service
 //                'date_of_birth' => $request['date_of_birth'],
 //            ];
 //        }
-//        return [];
+        return [];
     }
 }

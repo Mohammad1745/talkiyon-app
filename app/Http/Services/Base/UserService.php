@@ -20,22 +20,22 @@ class UserService extends Service
     }
 
     /**
-     * @param $request
+     * @param $data
      * @param $randNo
      * @return array
      */
-    public function userDataFormatter (array $request, string $randNo): array
+    public function userDataFormatter (array $data, string $randNo): array
     {
-        if ($request){
+        if ($data){
             return [
-                'email' => $request['email'],
-                'username' => $request['username'],
-                'password' => Hash::make( $request['password']),
-                'phone' => $request['phone'],
-                'first_name' => $request['first_name'],
-                'last_name' => $request['last_name'],
-                'role' => $request['role'],
-                'gender' => $request['gender'],
+                'email' => $data['email'],
+                'username' => $data['username'],
+                'password' => Hash::make( $data['password']),
+                'phone' => $data['phone'],
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'role' => $data['role'],
+                'gender' => $data['gender'],
                 'status' => USER_PENDING_STATUS,
                 'phone_verification_code' => $randNo? $randNo : null,
             ];

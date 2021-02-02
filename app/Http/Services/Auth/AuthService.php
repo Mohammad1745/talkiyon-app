@@ -3,6 +3,7 @@
 
 namespace App\Http\Services\Auth;
 
+use App\Events\UserSignedUp;
 use App\Http\Services\Base\ResetPasswordService;
 use App\Http\Services\Base\StudentInfoService;
 use App\Http\Services\Base\TeacherInfoService;
@@ -75,6 +76,7 @@ class AuthService extends ResponseService
                 $this->teacherInfoService->create( $this->teacherInfoService->teacherInfoDataFormatter( $user->id, $request->all()));
             $this->_phoneVerificationCodeSender( $user->first_name.' '.$user->last_name, $user->phone,$randNo);
             $authorization = $this->_authorize( $user);
+            event(new UserSignedUp($this->userService->countWhere(['role' => STUDENT_ROLE])));
             DB::commit();
 
             return $this->response( $this->_authData($user, $authorization))->success(__("Successfully signed up as a ". userRoles( $user->role).". Verification Code has been sent to ".$user->phone."."));
@@ -107,23 +109,6 @@ class AuthService extends ResponseService
                     }
                     return $this->response()->success('Logged In Successfully.');
                 }
-            } else {
-                return $this->response()->error('Wrong Email Or Password');
-            }
-        } catch (Exception $exception) {
-            return $this->response()->error( $exception->getMessage());
-        }
-    }
-
-    /**
-     * @param object $request
-     * @return array
-     */
-    public function adminLoginProcess (object $request): array
-    {
-        try {
-            if(Auth::attempt( $this->_credentials( $request->only('phone', 'password')))){
-
             } else {
                 return $this->response()->error('Wrong Email Or Password');
             }

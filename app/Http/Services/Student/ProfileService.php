@@ -22,7 +22,7 @@ class ProfileService extends ResponseService
     private $studentInfoService;
 
     /**
-     * DashboardService constructor.
+     * ProfileService constructor.
      * @param UserService $userService
      * @param StudentInfoService $studentInfoService
      */
@@ -30,6 +30,16 @@ class ProfileService extends ResponseService
     {
         $this->userService = $userService;
         $this->studentInfoService = $studentInfoService;
+    }
+
+    /**
+     * @return array
+     */
+    public function helpers (): array
+    {
+        return $this->response([
+            'avatar_view_path' => asset(avatarViewPath())
+        ])->success();
     }
 
     /**

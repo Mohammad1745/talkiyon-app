@@ -151,6 +151,22 @@ function documentManualViewPath()
 /**
  * @return string
  */
+function timelinePath()
+{
+    return 'public/timeline/';
+}
+
+/**
+ * @return string
+ */
+function timelineViewPath()
+{
+    return '/storage/timeline/';
+}
+
+/**
+ * @return string
+ */
 function avatarPath()
 {
     return 'public/avatar/';
@@ -380,6 +396,103 @@ function genders ($input = null)
         SEX_MALE => __('Male'),
         SEX_FEMALE => __('Female'),
         SEX_OTHER => __('Others'),
+    ];
+
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
+/**
+ * @param null $input
+ * @return array|mixed
+ */
+function connections ($input = null)
+{
+    $output = [
+        CONNECTION_TYPE_FRIEND => __('Friend'),
+        CONNECTION_TYPE_COLLABORATOR => __('Collaborator'),
+        CONNECTION_TYPE_MENTOR => __('Mentor'),
+        CONNECTION_TYPE_MENTEE => __('Mentee'),
+    ];
+
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
+/**
+ * @param null $input
+ * @return array|mixed
+ */
+function connectionTypes ($input = null)
+{
+    $output = [
+        CONNECTION_TYPE_ALL => __('All'),
+        CONNECTION_TYPE_FRIEND => __('Friend'),
+        CONNECTION_TYPE_COLLABORATOR => __('Collaborator'),
+        CONNECTION_TYPE_MENTOR => __('Mentor'),
+        CONNECTION_TYPE_MENTEE => __('Mentee'),
+    ];
+
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
+/**
+ * @param null $input
+ * @return array|mixed
+ */
+function talkTypes ($input = null)
+{
+    $output = [
+        TALK_TYPE_TALKIYON_OFFICIAL => __('Talkiyon Official'),
+        TALK_TYPE_PUBLIC => __('Public'),
+    ];
+
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
+/**
+ * @param null $input
+ * @return array|mixed
+ */
+function talkFileTypes ($input = null)
+{
+    $output = [
+        TALK_FILE_TYPE_IMAGE => __('Image'),
+        TALK_FILE_TYPE_DOCUMENT => __('Document'),
+        TALK_FILE_TYPE_VIDEO => __('Video'),
+    ];
+
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
+/**
+ * @param null $input
+ * @return array|mixed
+ */
+function talkSecurityTypes ($input = null)
+{
+    $output = [
+        TALK_SECURITY_TYPE_PUBLIC => __('Public'),
+        TALK_SECURITY_TYPE_SPECIFIC => __('Specific'),
+        TALK_SECURITY_TYPE_CONNECTION => __('Connection'),
     ];
 
     if (is_null($input)) {

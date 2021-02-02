@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Student\ProfileController;
+use App\Http\Controllers\Api\Student\TimelineController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 //Profile
 Route::prefix('profile')->name('profile')->group(function () {
-    Route::get('/info', [ProfileController::class, 'info'])->name('info');
-    Route::post('/save-image', [ProfileController::class, 'saveImage'])->name('saveImage');
+    Route::get('/helpers', [ProfileController::class, 'helpers'])->name('.helpers');
+    Route::get('/info', [ProfileController::class, 'info'])->name('.info');
+    Route::post('/save-image', [ProfileController::class, 'saveImage'])->name('.saveImage');
+});
+//Talk
+Route::prefix('talk')->name('talk')->group(function () {
+    Route::post('/present', [TimelineController::class, 'present'])->name('.present');
 });

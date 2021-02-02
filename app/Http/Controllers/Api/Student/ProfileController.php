@@ -26,6 +26,14 @@ class ProfileController extends Controller
     /**
      * @return JsonResponse
      */
+    public function helpers (): JsonResponse
+    {
+        return response()->json( $this->service->helpers());
+    }
+
+    /**
+     * @return JsonResponse
+     */
     public function info (): JsonResponse
     {
         return response()->json( $this->service->info());
