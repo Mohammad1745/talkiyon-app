@@ -35,6 +35,16 @@ class ProfileService extends ResponseService
     /**
      * @return array
      */
+    public function helpers (): array
+    {
+        return $this->response([
+            'avatar_view_path' => asset(avatarViewPath())
+        ])->success();
+    }
+
+    /**
+     * @return array
+     */
     public function info (): array
     {
         try {
