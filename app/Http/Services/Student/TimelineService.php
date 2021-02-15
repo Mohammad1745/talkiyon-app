@@ -46,8 +46,10 @@ class TimelineService extends ResponseService
     {
         try {
             $talk = $this->talkService->create( $this->talkService->talkDataFormatter( Auth::id(), $request->all()));
-            foreach ($request->all()['files'] as $file) {
-                $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter( $talk->id, ['file' => uploadFile( $file, timelinePath())]));
+            if ($request->has(['files'])) {
+                foreach ($request->all()['files'] as $file) {
+                    $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter( $talk->id, ['file' => uploadFile( $file, timelinePath())]));
+                }
             }
 
             return $this->response()->success(__('Talk has been presented successfully.'));
