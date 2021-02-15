@@ -69,4 +69,22 @@ class TimelineService extends ResponseService
             return $this->response()->error( $exception->getMessage());
         }
     }
+
+    /**
+     * @return array
+     */
+    public function index (): array
+    {
+        try {
+            $talks = $this->talkService->paginateWhere(['user_id'=>Auth::id()]);
+            $talks->map(function ($item) {
+                $item['files'] = $this->talkFileService->pluckWhere(['talk_id'=>$item['id']], 'file');
+                $item["encrypted_id"] = encrypt($item['id']);
+            });
+
+            return $this->response($talks->toArray())->success();
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
 }

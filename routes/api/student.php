@@ -25,4 +25,5 @@ Route::prefix('profile')->name('profile')->group(function () {
 Route::prefix('talk')->name('talk')->group(function () {
     Route::get('/helpers', [TimelineController::class, 'helpers'])->name('.helpers');
     Route::post('/present', [TimelineController::class, 'present'])->name('.present');
+    Route::get('/index', [TimelineController::class, 'index'])->name('.index');
 });

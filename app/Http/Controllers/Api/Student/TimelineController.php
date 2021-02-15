@@ -42,4 +42,12 @@ class TimelineController extends Controller
     {
         return response()->json( $this->service->present( $request));
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
+    {
+        return response()->json( $this->service->index());
+    }
 }
