@@ -39,6 +39,18 @@ class TimelineService extends ResponseService
     }
 
     /**
+     * @return array
+     */
+    public function helpers (): array
+    {
+        return $this->response([
+            'type' => talkTypes(),
+            'security_type' => talkSecurityTypes(),
+            'timeline_view_path' => asset(timelineViewPath())
+        ])->success();
+    }
+
+    /**
      * @param object $request
      * @return array
      */
