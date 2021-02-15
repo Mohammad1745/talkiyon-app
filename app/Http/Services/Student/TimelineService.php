@@ -80,6 +80,7 @@ class TimelineService extends ResponseService
             $talks->map(function ($item) {
                 $item['files'] = $this->talkFileService->pluckWhere(['talk_id'=>$item['id']], 'file');
                 $item["encrypted_id"] = encrypt($item['id']);
+                $item["user_id"] = encrypt($item['user_id']);
             });
 
             return $this->response($talks->toArray())->success();
