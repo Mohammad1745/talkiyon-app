@@ -133,6 +133,19 @@ class Repository
 
     /**
      * @param array $where
+     * @param int $pagination
+     * @param array $fields
+     * @return mixed
+     */
+    public function paginateWhere (array $where, int $pagination=PAGINATE_SMALL, array $fields=[])
+    {
+        return count($fields) ?
+            $this->model->select($fields)->where( $where)->paginate($pagination):
+            $this->model->where( $where)->paginate($pagination);
+    }
+
+    /**
+     * @param array $where
      * @return mixed
      */
     public function countWhere (array $where)

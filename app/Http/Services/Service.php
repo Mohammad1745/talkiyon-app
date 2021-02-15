@@ -125,6 +125,16 @@ class Service
 
     /**
      * @param array $where
+     * @param int $pagination
+     * @param array $fields
+     * @return mixed
+     */
+    public function paginateWhere (array $where, int $pagination=PAGINATE_SMALL, array $fields=[])
+    {
+        return $this->repository->paginateWhere( $where, $pagination,$fields);
+    }
+    /**
+     * @param array $where
      * @return mixed
      */
     public function countWhere (array $where)

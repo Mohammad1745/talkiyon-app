@@ -26,11 +26,28 @@ class TimelineController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function helpers (): JsonResponse
+    {
+        return response()->json( $this->service->helpers());
+    }
+
+
+    /**
      * @param PresentTalkRequest $request
      * @return JsonResponse
      */
     public function present (PresentTalkRequest $request): JsonResponse
     {
         return response()->json( $this->service->present( $request));
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
+    {
+        return response()->json( $this->service->index());
     }
 }

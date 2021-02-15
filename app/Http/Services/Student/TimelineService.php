@@ -39,6 +39,18 @@ class TimelineService extends ResponseService
     }
 
     /**
+     * @return array
+     */
+    public function helpers (): array
+    {
+        return $this->response([
+            'type' => talkTypes(),
+            'security_type' => talkSecurityTypes(),
+            'timeline_view_path' => asset(timelineViewPath())
+        ])->success();
+    }
+
+    /**
      * @param object $request
      * @return array
      */
@@ -46,11 +58,31 @@ class TimelineService extends ResponseService
     {
         try {
             $talk = $this->talkService->create( $this->talkService->talkDataFormatter( Auth::id(), $request->all()));
-            foreach ($request->all()['files'] as $file) {
-                $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter( $talk->id, ['file' => uploadFile( $file, timelinePath())]));
+            if ($request->has(['files'])) {
+                foreach ($request->all()['files'] as $file) {
+                    $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter( $talk->id, ['file' => uploadFile( $file, timelinePath())]));
+                }
             }
 
             return $this->response()->success(__('Talk has been presented successfully.'));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function index (): array
+    {
+        try {
+            $talks = $this->talkService->paginateWhere(['user_id'=>Auth::id()]);
+            $talks->map(function ($item) {
+                $item['files'] = $this->talkFileService->pluckWhere(['talk_id'=>$item['id']], 'file');
+                $item["encrypted_id"] = encrypt($item['id']);
+            });
+
+            return $this->response($talks->toArray())->success();
         } catch (Exception $exception) {
             return $this->response()->error( $exception->getMessage());
         }
