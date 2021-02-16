@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PresentTalkRequest;
+use App\Http\Requests\Api\UpdateTalkRequest;
 use App\Http\Services\Student\TimelineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,7 +34,6 @@ class TimelineController extends Controller
         return response()->json( $this->service->helpers());
     }
 
-
     /**
      * @param PresentTalkRequest $request
      * @return JsonResponse
@@ -49,5 +49,32 @@ class TimelineController extends Controller
     public function index(): JsonResponse
     {
         return response()->json( $this->service->index());
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function read(Request $request): JsonResponse
+    {
+        return response()->json( $this->service->read( $request));
+    }
+
+    /**
+     * @param UpdateTalkRequest $request
+     * @return JsonResponse
+     */
+    public function update (UpdateTalkRequest $request): JsonResponse
+    {
+        return response()->json( $this->service->update( $request));
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function delete(Request $request): JsonResponse
+    {
+        return response()->json( $this->service->delete( $request));
     }
 }
