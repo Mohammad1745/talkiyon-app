@@ -9,6 +9,7 @@ use App\Http\Services\Base\UserService;
 use App\Http\Services\ResponseService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TimelineService extends ResponseService
 {
@@ -57,15 +58,19 @@ class TimelineService extends ResponseService
     public function present (object $request): array
     {
         try {
+            DB::beginTransaction();
             $talk = $this->talkService->create( $this->talkService->talkDataFormatter( Auth::id(), $request->all()));
             if ($request->has(['files'])) {
                 foreach ($request->all()['files'] as $file) {
                     $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter( $talk->id, ['file' => uploadFile( $file, timelinePath())]));
                 }
             }
+            DB::commit();
 
             return $this->response()->success(__('Talk has been presented successfully.'));
         } catch (Exception $exception) {
+            DB::rollBack();
+
             return $this->response()->error( $exception->getMessage());
         }
     }
@@ -116,20 +121,26 @@ class TimelineService extends ResponseService
     public function update (object $request): array
     {
         try {
+            DB::beginTransaction();
             $talk = $this->talkService->lastWhere(['id' => decrypt($request->id), 'user_id' => Auth::id()]);
             if (!$talk) {
+                DB::rollBack();
+
                 return $this->response()->error( __('Talk not found'));
             }
-            $this->talkService->deleteWhere(['id' => $talk->id]);
-            $talk = $this->talkService->create( $this->talkService->talkDataFormatter( Auth::id(), $request->all()));
+            $this->talkFileService->deleteWhere(['talk_id' => $talk->id]);
+            $this->talkService->updateWhere(['id' => $talk->id], $this->talkService->talkDataFormatter( Auth::id(), $request->all()));
             if ($request->has(['files'])) {
                 foreach ($request->all()['files'] as $file) {
                     $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter( $talk->id, ['file' => uploadFile( $file, timelinePath())]));
                 }
             }
+            DB::commit();
 
             return $this->response()->success(__('Talk has been updated successfully.'));
         } catch (Exception $exception) {
+            DB::rollBack();
+
             return $this->response()->error( $exception->getMessage());
         }
     }
