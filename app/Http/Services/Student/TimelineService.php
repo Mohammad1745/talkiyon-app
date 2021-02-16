@@ -88,4 +88,68 @@ class TimelineService extends ResponseService
             return $this->response()->error( $exception->getMessage());
         }
     }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function read (object $request): array
+    {
+        try {
+            $talk = $this->talkService->lastWhere(['id'=> decrypt($request->id), 'user_id'=>Auth::id()]);
+            if (!$talk) {
+                return $this->response()->error( __('Talk not found'));
+            }
+            $talk['encrypted_id'] = encrypt($talk['id']);
+            $talk['files'] = $this->talkFileService->pluckWhere(['talk_id'=>$talk['id']], 'file');
+
+            return $this->response($talk->toArray())->success();
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function update (object $request): array
+    {
+        try {
+            $talk = $this->talkService->lastWhere(['id' => decrypt($request->id), 'user_id' => Auth::id()]);
+            if (!$talk) {
+                return $this->response()->error( __('Talk not found'));
+            }
+            $this->talkService->deleteWhere(['id' => $talk->id]);
+            $talk = $this->talkService->create( $this->talkService->talkDataFormatter( Auth::id(), $request->all()));
+            if ($request->has(['files'])) {
+                foreach ($request->all()['files'] as $file) {
+                    $this->talkFileService->create( $this->talkFileService->talkFileDataFormatter( $talk->id, ['file' => uploadFile( $file, timelinePath())]));
+                }
+            }
+
+            return $this->response()->success(__('Talk has been updated successfully.'));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function delete (object $request): array
+    {
+        try {
+            $talk = $this->talkService->lastWhere(['id' => decrypt($request->id), 'user_id' => Auth::id()]);
+            if (!$talk) {
+                return $this->response()->error( __('Talk not found'));
+            }
+            $this->talkService->deleteWhere(['id' => $talk->id]);
+
+            return $this->response()->success(__('Talk has been deleted successfully.'));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
 }
