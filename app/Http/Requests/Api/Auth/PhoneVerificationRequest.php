@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\Auth;
 
 use App\Http\Requests\Request;
 
-class LoginRequest extends Request
+class PhoneVerificationRequest extends Request
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,8 +14,7 @@ class LoginRequest extends Request
     public function rules ():array
     {
         return [
-            'phone' => 'required',
-            'password' => 'required'
+            'code' => 'required'
         ];
     }
 }

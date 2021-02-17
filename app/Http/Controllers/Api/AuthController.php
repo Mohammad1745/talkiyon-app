@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\CheckResetPasswordCodeRequest;
-use App\Http\Requests\Api\EmailVerificationRequest;
-use App\Http\Requests\Api\LoginRequest;
-use App\Http\Requests\Api\PhoneVerificationRequest;
-use App\Http\Requests\Api\ResetPasswordRequest;
-use App\Http\Requests\Api\SendResetPasswordCodeRequest;
-use App\Http\Requests\Api\SignupRequest;
+use App\Http\Requests\Api\Auth\CheckResetPasswordCodeRequest;
+use App\Http\Requests\Api\Auth\EmailVerificationRequest;
+use App\Http\Requests\Api\Auth\LoginRequest;
+use App\Http\Requests\Api\Auth\PhoneVerificationRequest;
+use App\Http\Requests\Api\Auth\ResetPasswordRequest;
+use App\Http\Requests\Api\Auth\SendResetPasswordCodeRequest;
+use App\Http\Requests\Api\Auth\SignupRequest;
 use App\Http\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;

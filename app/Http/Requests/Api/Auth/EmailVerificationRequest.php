@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\Auth;
 
 use App\Http\Requests\Request;
 
-class SendResetPasswordCodeRequest extends Request
+class EmailVerificationRequest extends Request
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +14,8 @@ class SendResetPasswordCodeRequest extends Request
     public function rules ():array
     {
         return [
-            'phone' => 'required'
+            'email' => 'required',
+            'code' => 'required'
         ];
     }
 }
