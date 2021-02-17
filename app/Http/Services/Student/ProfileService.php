@@ -77,4 +77,20 @@ class ProfileService extends ResponseService
             return $this->response()->error( $exception->getMessage());
         }
     }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function saveAbout (object $request): array
+    {
+        try {
+            $about = $this->studentInfoService->lastWhere(['user_id' => Auth::id()])->about;
+            $this->studentInfoService->updateWhere(['user_id' => Auth::id()], ['about' => $request->about]);
+
+            return $this->response()->success(__('About has been '.(!$about ? 'added' : 'updated').' successfully.'));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
 }

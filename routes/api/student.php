@@ -20,6 +20,7 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::get('/helpers', [ProfileController::class, 'helpers'])->name('.helpers');
     Route::get('/info', [ProfileController::class, 'info'])->name('.info');
     Route::post('/save-image', [ProfileController::class, 'saveImage'])->name('.saveImage');
+    Route::post('/save-about', [ProfileController::class, 'saveAbout'])->name('.saveAbout');
 });
 //Talk
 Route::prefix('talk')->name('talk')->group(function () {
