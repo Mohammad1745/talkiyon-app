@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResponseBoosTable extends Migration
+class CreateResetPasswordTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateResponseBoosTable extends Migration
      */
     public function up()
     {
-        Schema::create('response_boos', function (Blueprint $table) {
+        Schema::create('reset_password', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('response_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('code');
             $table->timestamps();
-
-            $table->foreign('response_id')->references('id')->on('responses')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -31,6 +28,6 @@ class CreateResponseBoosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('response_boos');
+        Schema::dropIfExists('reset_password');
     }
 }

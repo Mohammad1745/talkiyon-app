@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAddressesTable extends Migration
+class CreateResponseClapTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('response_clap', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('response_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('country');
-            $table->string('division')->nullable();
-            $table->string('district')->nullable();
-            $table->string('sub_district')->nullable();
-            $table->string('zipcode');
-            $table->string('location')->nullable();
             $table->timestamps();
+
+            $table->foreign('response_id')->references('id')->on('response')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
 
@@ -33,6 +31,6 @@ class CreateAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('response_clap');
     }
 }

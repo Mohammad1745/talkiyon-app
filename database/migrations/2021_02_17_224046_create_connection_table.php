@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStudentInfosTable extends Migration
+class CreateConnectionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateStudentInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_infos', function (Blueprint $table) {
+        Schema::create('connection', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->date('date_of_birth');
-            $table->text('introduction')->nullable();
-            $table->text('about')->nullable();
+            $table->unsignedBigInteger('connected_with');
+            $table->tinyInteger('type');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateStudentInfosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_infos');
+        Schema::dropIfExists('connection');
     }
 }

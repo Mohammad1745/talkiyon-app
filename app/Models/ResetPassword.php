@@ -9,5 +9,13 @@ class ResetPassword extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string
+     */
+    protected $table = 'reset_password';
+
+    /**
+     * @var string[]
+     */
     protected $fillable = ['user_id', 'code'];
 }

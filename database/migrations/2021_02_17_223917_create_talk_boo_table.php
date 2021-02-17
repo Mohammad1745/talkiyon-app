@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTalkClapsTable extends Migration
+class CreateTalkBooTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateTalkClapsTable extends Migration
      */
     public function up()
     {
-        Schema::create('talk_claps', function (Blueprint $table) {
+        Schema::create('talk_boo', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('talk_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('talk_id')->references('id')->on('talks')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('talk_id')->references('id')->on('talk')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateTalkClapsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('talk_claps');
+        Schema::dropIfExists('talk_boo');
     }
 }

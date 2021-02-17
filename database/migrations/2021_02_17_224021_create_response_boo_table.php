@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTalksTable extends Migration
+class CreateResponseBooTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateTalksTable extends Migration
      */
     public function up()
     {
-        Schema::create('talks', function (Blueprint $table) {
+        Schema::create('response_boo', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('response_id');
             $table->unsignedBigInteger('user_id');
-            $table->text('content')->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->tinyInteger('type');
-            $table->tinyInteger('security_type');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('response_id')->references('id')->on('response')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
 
@@ -33,6 +31,6 @@ class CreateTalksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('talks');
+        Schema::dropIfExists('response_boo');
     }
 }

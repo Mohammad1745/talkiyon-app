@@ -9,5 +9,13 @@ class TalkClap extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string
+     */
+    protected $table = 'talk_clap';
+
+    /**
+     * @var string[]
+     */
     protected $fillable = ['talk_id', 'user_id'];
 }

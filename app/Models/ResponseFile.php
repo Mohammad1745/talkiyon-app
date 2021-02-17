@@ -9,5 +9,13 @@ class ResponseFile extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string
+     */
+    protected $table = 'response_file';
+
+    /**
+     * @var string[]
+     */
     protected $fillable = ['response_id', 'file'];
 }
