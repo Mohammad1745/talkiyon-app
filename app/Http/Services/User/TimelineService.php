@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Services\Student;
+namespace App\Http\Services\User;
 
 use App\Http\Services\Base\TalkFileService;
 use App\Http\Services\Base\TalkService;

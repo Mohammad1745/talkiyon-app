@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Student\Profile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Profile\ProfileAboutRequest;
 use App\Http\Requests\Api\Profile\ProfileImageRequest;
-use App\Http\Services\Student\ProfileService;
+use App\Http\Services\User\ProfileService;
 use Illuminate\Http\JsonResponse;
 
 class InformationController extends Controller
