@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\Student\ProfileController;
+use App\Http\Controllers\Api\Student\Profile\InformationController;
 use App\Http\Controllers\Api\Student\TimelineController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 //Profile
 Route::prefix('profile')->name('profile')->group(function () {
-    Route::get('/helpers', [ProfileController::class, 'helpers'])->name('.helpers');
-    Route::get('/info', [ProfileController::class, 'info'])->name('.info');
-    Route::post('/save-image', [ProfileController::class, 'saveImage'])->name('.saveImage');
-    Route::post('/save-about', [ProfileController::class, 'saveAbout'])->name('.saveAbout');
+    Route::get('/helpers', [InformationController::class, 'helpers'])->name('.helpers');
+    Route::get('/info', [InformationController::class, 'info'])->name('.info');
+    Route::post('/save-image', [InformationController::class, 'saveImage'])->name('.saveImage');
+    Route::post('/save-about', [InformationController::class, 'saveAbout'])->name('.saveAbout');
 });
 //Talk
 Route::prefix('talk')->name('talk')->group(function () {
