@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Student\Profile\InformationController;
-use App\Http\Controllers\Api\Student\TimelineController;
+use App\Http\Controllers\Api\Student\Timeline\TalkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,10 +24,10 @@ Route::prefix('profile')->name('profile')->group(function () {
 });
 //Talk
 Route::prefix('talk')->name('talk')->group(function () {
-    Route::get('/helpers', [TimelineController::class, 'helpers'])->name('.helpers');
-    Route::post('/present', [TimelineController::class, 'present'])->name('.present');
-    Route::get('/index', [TimelineController::class, 'index'])->name('.index');
-    Route::get('/read', [TimelineController::class, 'read'])->name('.read');
-    Route::post('/update', [TimelineController::class, 'update'])->name('.update');
-    Route::get('/delete', [TimelineController::class, 'delete'])->name('.delete');
+    Route::get('/helpers', [TalkController::class, 'helpers'])->name('.helpers');
+    Route::post('/present', [TalkController::class, 'present'])->name('.present');
+    Route::get('/index', [TalkController::class, 'index'])->name('.index');
+    Route::get('/read', [TalkController::class, 'read'])->name('.read');
+    Route::post('/update', [TalkController::class, 'update'])->name('.update');
+    Route::get('/delete', [TalkController::class, 'delete'])->name('.delete');
 });

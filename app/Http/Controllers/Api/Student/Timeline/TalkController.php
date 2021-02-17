@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Student;
+namespace App\Http\Controllers\Api\Student\Timeline;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Timeline\PresentTalkRequest;
@@ -9,7 +9,7 @@ use App\Http\Services\Student\TimelineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class TimelineController extends Controller
+class TalkController extends Controller
 {
 
     /**
@@ -18,7 +18,7 @@ class TimelineController extends Controller
     protected $service;
 
     /**
-     * TimelineController constructor.
+     * TalkController constructor.
      * @param TimelineService $service
      */
     public function __construct (TimelineService $service)
