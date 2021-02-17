@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Student\Profile;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ProfileAboutRequest;
-use App\Http\Requests\Api\ProfileImageRequest;
+use App\Http\Requests\Api\Profile\ProfileAboutRequest;
+use App\Http\Requests\Api\Profile\ProfileImageRequest;
 use App\Http\Services\Student\ProfileService;
 use Illuminate\Http\JsonResponse;
 
