@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\PresentTalkRequest;
-use App\Http\Requests\Api\UpdateTalkRequest;
+use App\Http\Requests\Api\Timeline\PresentTalkRequest;
+use App\Http\Requests\Api\Timeline\UpdateTalkRequest;
 use App\Http\Services\Student\TimelineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
