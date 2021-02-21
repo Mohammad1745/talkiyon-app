@@ -12,12 +12,12 @@ class Connection extends Model
     /**
      * @var string
      */
-    protected $table = 'table_name';
+    protected $table = 'connection';
 
     /**
      * @var string[]
      */
     protected $fillable = [
-        //
+        'user_id', 'connected_with', 'type', 'status'
     ];
 }

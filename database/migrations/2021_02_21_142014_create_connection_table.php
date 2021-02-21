@@ -18,6 +18,7 @@ class CreateConnectionTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('connected_with');
             $table->tinyInteger('type');
+            $table->tinyInteger('status')->default(STATUS_PENDING);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
