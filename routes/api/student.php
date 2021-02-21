@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Student\Profile\ConnectionController;
 use App\Http\Controllers\Api\Student\Profile\InformationController;
 use App\Http\Controllers\Api\Student\Timeline\TalkController;
 use Illuminate\Support\Facades\Route;
@@ -21,8 +22,14 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::get('/info', [InformationController::class, 'info'])->name('.info');
     Route::post('/save-image', [InformationController::class, 'saveImage'])->name('.saveImage');
     Route::post('/save-about', [InformationController::class, 'saveAbout'])->name('.saveAbout');
+
+    Route::prefix('connection')->name('.connection')->group( function () {
+        Route::get('/index', [ConnectionController::class, 'index'])->name('.index');
+        Route::post('/create', [ConnectionController::class, 'create'])->name('.create');
+        Route::get('/delete', [ConnectionController::class, 'delete'])->name('.delete');
+    });
 });
-//Talk
+//Timeline
 Route::prefix('talk')->name('talk')->group(function () {
     Route::get('/helpers', [TalkController::class, 'helpers'])->name('.helpers');
     Route::post('/present', [TalkController::class, 'present'])->name('.present');

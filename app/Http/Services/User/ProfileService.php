@@ -3,6 +3,7 @@
 
 namespace App\Http\Services\User;
 
+use App\Http\Services\Base\ConnectionService;
 use App\Http\Services\Base\StudentInfoService;
 use App\Http\Services\Base\UserService;
 use App\Http\Services\ResponseService;
@@ -20,16 +21,22 @@ class ProfileService extends ResponseService
      * @var StudentInfoService
      */
     private $studentInfoService;
+    /**
+     * @var ConnectionService
+     */
+    private $connectionService;
 
     /**
      * ProfileService constructor.
      * @param UserService $userService
      * @param StudentInfoService $studentInfoService
+     * @param ConnectionService $connectionService
      */
-    public function __construct (UserService $userService, StudentInfoService $studentInfoService)
+    public function __construct (UserService $userService, StudentInfoService $studentInfoService, ConnectionService $connectionService)
     {
         $this->userService = $userService;
         $this->studentInfoService = $studentInfoService;
+        $this->connectionService = $connectionService;
     }
 
     /**
@@ -38,7 +45,8 @@ class ProfileService extends ResponseService
     public function helpers (): array
     {
         return $this->response([
-            'avatar_view_path' => asset(avatarViewPath())
+            'avatar_view_path' => asset(avatarViewPath()),
+            'connection_types' => connectionTypes()
         ])->success();
     }
 
@@ -93,4 +101,38 @@ class ProfileService extends ResponseService
             return $this->response()->error( $exception->getMessage());
         }
     }
+
+    /**
+     * @return array
+     */
+    public function connections (): array
+    {
+        try {
+            $connections = $this->connectionService->getWhere(['user_id'=>Auth::id()])->toArray();
+            foreach ($connections as $key => $item) {
+                $connections[$key]['id'] = encrypt($item['id']);
+                $connections[$key]['connected_with'] = $this->userService->lastWhere(['id' => $item['connected_with']], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'image'])->toArray();
+                $connections[$key]['connected_with']['id'] = encrypt($connections[$key]['connected_with']['id']);
+            }
+
+            return $this->response($connections)->success();
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function saveConnection (object $request): array
+    {
+        try {
+            $this->connectionService->create( $this->connectionService->connectionDataFormatter( Auth::id(), $request->only('connected_with', 'type')));
+
+            return $this->response()->success(__('Connection has been established successfully.'));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
 }
