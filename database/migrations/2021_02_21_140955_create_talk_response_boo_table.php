@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResponseFileTable extends Migration
+class TalkResponseBoo extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateResponseFileTable extends Migration
      */
     public function up()
     {
-        Schema::create('response_file', function (Blueprint $table) {
+        Schema::create('talk_response_boo', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('response_id');
-            $table->string('file');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
             $table->foreign('response_id')->references('id')->on('response')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateResponseFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('response_file');
+        Schema::dropIfExists('talk_response_boo');
     }
 }

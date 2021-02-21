@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResponseTable extends Migration
+class TalkResponse extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateResponseTable extends Migration
      */
     public function up()
     {
-        Schema::create('response', function (Blueprint $table) {
+        Schema::create('talk_response', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('talk_id');
             $table->unsignedBigInteger('user_id');
@@ -33,6 +33,6 @@ class CreateResponseTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('response');
+        Schema::dropIfExists('talk_response');
     }
 }

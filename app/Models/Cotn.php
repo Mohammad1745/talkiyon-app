@@ -5,17 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Response extends Model
+class Cotn extends Model
 {
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'response';
+    protected $table = 'table_name';
 
     /**
      * @var string[]
      */
-    protected $fillable = ['talk_id', 'user_id', 'parent_id', 'content'];
+    protected $fillable = [
+        //
+    ];
 }

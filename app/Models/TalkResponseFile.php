@@ -5,17 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ResponseBoo extends Model
+class TalkResponseFile extends Model
 {
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'response_boo';
+    protected $table = 'talk_response_file';
 
     /**
      * @var string[]
      */
-    protected $fillable = ['response_id', 'user_id'];
+    protected $fillable = [
+        'response_id', 'file'
+    ];
 }

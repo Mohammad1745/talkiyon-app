@@ -41,6 +41,6 @@ class MakeModelMigration extends Command
         $model = $this->argument('table');
         $migration = strtosnake( $model);
         Artisan::call('make:model '.$model);
-        Artisan::call('make:migration '.$migration.' --create='.$migration);
+        Artisan::call('make:migration create_'.$migration.'_table --create='.$migration);
     }
 }

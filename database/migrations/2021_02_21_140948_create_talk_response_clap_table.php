@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResponseBooTable extends Migration
+class TalkResponseClap extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateResponseBooTable extends Migration
      */
     public function up()
     {
-        Schema::create('response_boo', function (Blueprint $table) {
+        Schema::create('talk_response_clap', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('response_id');
             $table->unsignedBigInteger('user_id');
@@ -31,6 +31,6 @@ class CreateResponseBooTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('response_boo');
+        Schema::dropIfExists('talk_response_clap');
     }
 }

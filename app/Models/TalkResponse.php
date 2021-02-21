@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Connection extends Model
+class TalkResponse extends Model
 {
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'table_name';
+    protected $table = 'talk_response';
 
     /**
      * @var string[]
      */
     protected $fillable = [
-        //
+        'talk_id', 'user_id', 'parent_id', 'content'
     ];
 }
