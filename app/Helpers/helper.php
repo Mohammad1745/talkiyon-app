@@ -131,7 +131,7 @@ function strtosnake(string $input): string
             $index = $i;
         }
     }
-    return strtolower($output.substr($input, $index, strlen($input)-1));
+    return strtolower($output.substr($input, $index, strlen($input)-$index));
 }
 
 /**
