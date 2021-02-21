@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TalkResponseClap extends Migration
+class CreateTalkResponseClapTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class TalkResponseClap extends Migration
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('response_id')->references('id')->on('response')->onDelete('cascade');
+            $table->foreign('response_id')->references('id')->on('talk_response')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
         });
     }

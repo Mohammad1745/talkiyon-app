@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TalkResponseFile extends Migration
+class CreateTalkResponseFileTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class TalkResponseFile extends Migration
             $table->string('file');
             $table->timestamps();
 
-            $table->foreign('response_id')->references('id')->on('response')->onDelete('cascade');
+            $table->foreign('response_id')->references('id')->on('talk_response')->onDelete('cascade');
         });
     }
 
