@@ -116,6 +116,61 @@ function isPhone($subject)
 {
     return preg_match('/^(01){1}[1-9]{1}[0-9]{8}$/', $subject);
 }
+
+/**
+ * @param string $input
+ * @return string
+ */
+function strtosnake(string $input): string
+{
+    $output ='';
+    $index = 0;
+    for ($i=1; $i<strlen($input); $i++) {
+        if ($input[$i]>='A'&&$input[$i]<='Z') {
+            $output .= substr($input, $index, $i-$index).'_';
+            $index = $i;
+        }
+    }
+    return strtolower($output.substr($input, $index, strlen($input)-1));
+}
+
+/**
+ * @param null $input
+ * @return array|mixed
+ */
+function numbersMultipliers($input = null)
+{
+    $output = [
+        THOUSAND => __('K'),
+        MILLION => __('M'),
+        BILLION => __('B'),
+        TRILLION => __('T'),
+        QUADRILLION => __('Q'),
+    ];
+
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
+/**
+ * @param int $input
+ * @param int $precision
+ * @return float|int|mixed|string
+ */
+function convertToMultiplier($input=0, $precision=2){
+    if($input>0){
+        return $input>=QUADRILLION ? round($input/QUADRILLION, $precision).' '.numbersMultipliers(QUADRILLION) :
+            ($input>=TRILLION ? round($input/TRILLION, $precision).' '.numbersMultipliers(TRILLION) :
+                ($input>=BILLION ? round($input/BILLION, $precision).' '.numbersMultipliers(BILLION) :
+                    ($input>=MILLION ? round($input/MILLION, $precision).' '.numbersMultipliers(MILLION) :
+                        ($input>=THOUSAND ? round($input/THOUSAND, $precision).' '.numbersMultipliers(THOUSAND) : round($input, $precision)))));
+    }
+    return $input;
+}
+
 /**
  * @return string
  */
@@ -559,41 +614,4 @@ function feedbackTypes($input = null)
     } else {
         return $output[$input];
     }
-}
-
-/**
- * @param null $input
- * @return array|mixed
- */
-function numbersMultipliers($input = null)
-{
-    $output = [
-        THOUSAND => __('K'),
-        MILLION => __('M'),
-        BILLION => __('B'),
-        TRILLION => __('T'),
-        QUADRILLION => __('Q'),
-    ];
-
-    if (is_null($input)) {
-        return $output;
-    } else {
-        return $output[$input];
-    }
-}
-
-/**
- * @param int $input
- * @param int $precision
- * @return float|int|mixed|string
- */
-function convertToMultiplier($input=0, $precision=2){
-    if($input>0){
-        return $input>=QUADRILLION ? round($input/QUADRILLION, $precision).' '.numbersMultipliers(QUADRILLION) :
-                    ($input>=TRILLION ? round($input/TRILLION, $precision).' '.numbersMultipliers(TRILLION) :
-                        ($input>=BILLION ? round($input/BILLION, $precision).' '.numbersMultipliers(BILLION) :
-                            ($input>=MILLION ? round($input/MILLION, $precision).' '.numbersMultipliers(MILLION) :
-                                ($input>=THOUSAND ? round($input/THOUSAND, $precision).' '.numbersMultipliers(THOUSAND) : round($input, $precision)))));
-    }
-    return $input;
 }
