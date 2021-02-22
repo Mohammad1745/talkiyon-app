@@ -110,15 +110,7 @@ class ProfileService extends ResponseService
     public function connectionRequests (object $request): array
     {
         try {
-            $connections = $request->has('type')&&in_array($request->type, connectionTypes()) ?
-                $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>STATUS_PENDING, 'type'=>$request->type])->toArray():
-                $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>STATUS_PENDING])->toArray();
-            $connections = $connections ? $connections : [];
-            foreach ($connections as $key => $item) {
-                $connections[$key]['id'] = encrypt($item['id']);
-                $connections[$key]['connected_with'] = $this->userService->lastWhere(['id' => $item['connected_with']], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'image'])->toArray();
-                $connections[$key]['connected_with']['id'] = encrypt($connections[$key]['connected_with']['id']);
-            }
+            $connections = $this->_connectionList(STATUS_PENDING, $request);
 
             return $this->response($connections)->success();
         } catch (Exception $exception) {
@@ -133,15 +125,7 @@ class ProfileService extends ResponseService
     public function connections (object $request): array
     {
         try {
-            $connections = $request->types and in_array($request->types, connectionTypes()) ?
-                $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>STATUS_ACTIVE, 'type'=>$request->type])->toArray():
-                $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>STATUS_ACTIVE])->toArray();
-            $connections = $connections ? $connections : [];
-            foreach ($connections as $key => $item) {
-                $connections[$key]['id'] = encrypt($item['id']);
-                $connections[$key]['connected_with'] = $this->userService->lastWhere(['id' => $item['connected_with']], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'image'])->toArray();
-                $connections[$key]['connected_with']['id'] = encrypt($connections[$key]['connected_with']['id']);
-            }
+            $connections = $this->_connectionList(STATUS_ACTIVE, $request);
 
             return $this->response($connections)->success();
         } catch (Exception $exception) {
@@ -150,15 +134,35 @@ class ProfileService extends ResponseService
     }
 
     /**
+     * @param int $status
      * @param object $request
      * @return array
      */
-    public function saveConnection (object $request): array
+    private function _connectionList (int $status, object $request): array
+    {
+        $connections = $request->has('type') ?
+            $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>$status, 'type'=>$request->type])->toArray():
+            $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>$status])->toArray();
+        $connections = $connections ? $connections : [];
+        foreach ($connections as $key => $item) {
+            $connections[$key]['id'] = encrypt($item['id']);
+            $connections[$key]['connected_with'] = $this->userService->lastWhere(['id' => $item['connected_with']], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'image'])->toArray();
+            $connections[$key]['connected_with']['id'] = encrypt($connections[$key]['connected_with']['id']);
+        }
+
+        return $connections;
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function sendRequest (object $request): array
     {
         try {
             $this->connectionService->create( $this->connectionService->connectionDataFormatter( Auth::id(), $request->only('connected_with', 'type')));
 
-            return $this->response()->success(__('Connection has been established successfully.'));
+            return $this->response()->success(__('Connection Request has been sent successfully.'));
         } catch (Exception $exception) {
             return $this->response()->error( $exception->getMessage());
         }

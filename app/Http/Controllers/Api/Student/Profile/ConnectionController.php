@@ -28,7 +28,7 @@ class ConnectionController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function request (Request $request): JsonResponse
+    public function requests (Request $request): JsonResponse
     {
         return response()->json( $this->service->connectionRequests( $request));
     }
@@ -46,8 +46,8 @@ class ConnectionController extends Controller
      * @param ConnectionRequest $request
      * @return JsonResponse
      */
-    public function create (ConnectionRequest $request): JsonResponse
+    public function sendRequest (ConnectionRequest $request): JsonResponse
     {
-        return response()->json( $this->service->saveConnection( $request));
+        return response()->json( $this->service->sendRequest( $request));
     }
 }
