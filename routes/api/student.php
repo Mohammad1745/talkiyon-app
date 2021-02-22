@@ -24,6 +24,7 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::post('/save-about', [InformationController::class, 'saveAbout'])->name('.saveAbout');
 
     Route::prefix('connection')->name('.connection')->group( function () {
+        Route::get('/request', [ConnectionController::class, 'request'])->name('.request');
         Route::get('/index', [ConnectionController::class, 'index'])->name('.index');
         Route::post('/create', [ConnectionController::class, 'create'])->name('.create');
         Route::get('/delete', [ConnectionController::class, 'delete'])->name('.delete');

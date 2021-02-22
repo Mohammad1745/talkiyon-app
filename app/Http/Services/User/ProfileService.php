@@ -104,12 +104,16 @@ class ProfileService extends ResponseService
     }
 
     /**
+     * @param object $request
      * @return array
      */
-    public function connections (): array
+    public function connectionRequests (object $request): array
     {
         try {
-            $connections = $this->connectionService->getWhere(['user_id'=>Auth::id()])->toArray();
+            $connections = $request->has('type')&&in_array($request->type, connectionTypes()) ?
+                $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>STATUS_PENDING, 'type'=>$request->type])->toArray():
+                $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>STATUS_PENDING])->toArray();
+            $connections = $connections ? $connections : [];
             foreach ($connections as $key => $item) {
                 $connections[$key]['id'] = encrypt($item['id']);
                 $connections[$key]['connected_with'] = $this->userService->lastWhere(['id' => $item['connected_with']], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'image'])->toArray();
@@ -121,6 +125,30 @@ class ProfileService extends ResponseService
             return $this->response()->error( $exception->getMessage());
         }
     }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function connections (object $request): array
+    {
+        try {
+            $connections = $request->types and in_array($request->types, connectionTypes()) ?
+                $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>STATUS_ACTIVE, 'type'=>$request->type])->toArray():
+                $this->connectionService->getWhere(['user_id'=>Auth::id(), 'status'=>STATUS_ACTIVE])->toArray();
+            $connections = $connections ? $connections : [];
+            foreach ($connections as $key => $item) {
+                $connections[$key]['id'] = encrypt($item['id']);
+                $connections[$key]['connected_with'] = $this->userService->lastWhere(['id' => $item['connected_with']], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'image'])->toArray();
+                $connections[$key]['connected_with']['id'] = encrypt($connections[$key]['connected_with']['id']);
+            }
+
+            return $this->response($connections)->success();
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
     /**
      * @param object $request
      * @return array

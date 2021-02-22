@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Student\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Profile\ConnectionRequest;
+use App\Http\Requests\Request;
 use App\Http\Services\User\ProfileService;
 use Illuminate\Http\JsonResponse;
 
@@ -24,11 +25,21 @@ class ConnectionController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index (): JsonResponse
+    public function request (Request $request): JsonResponse
     {
-        return response()->json( $this->service->connections());
+        return response()->json( $this->service->connectionRequests( $request));
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function index (Request $request): JsonResponse
+    {
+        return response()->json( $this->service->connections( $request));
     }
 
     /**
