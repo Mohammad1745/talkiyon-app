@@ -46,7 +46,8 @@ class ProfileService extends ResponseService
     {
         return $this->response([
             'avatar_view_path' => asset(avatarViewPath()),
-            'connection_types' => connectionTypes()
+            'connection_types' => connectionTypes(),
+            'connection_statuses' => connectionStatuses()
         ])->success();
     }
 

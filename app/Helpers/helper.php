@@ -501,6 +501,26 @@ function connectionTypes ($input = null)
     }
 }
 
+
+/**
+ * @param null $input
+ * @return array|mixed
+ */
+function connectionStatuses ($input = null)
+{
+    $output = [
+        STATUS_PENDING => __('Pending'),
+        STATUS_INACTIVE => __('Inactive'),
+        STATUS_ACTIVE => __('Active'),
+    ];
+
+    if (is_null($input)) {
+        return $output;
+    } else {
+        return $output[$input];
+    }
+}
+
 /**
  * @param null $input
  * @return array|mixed
