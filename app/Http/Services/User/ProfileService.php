@@ -168,4 +168,18 @@ class ProfileService extends ResponseService
         }
     }
 
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function acceptRequest (object $request): array
+    {
+        try {
+            $this->connectionService->create( $this->connectionService->connectionDataFormatter( Auth::id(), $request->only('connected_with', 'type')));
+
+            return $this->response()->success(__('Connection Request has been sent successfully.'));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
 }

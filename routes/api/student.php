@@ -27,6 +27,7 @@ Route::prefix('profile')->name('profile')->group(function () {
         Route::get('/requests', [ConnectionController::class, 'requests'])->name('.requests');
         Route::get('/index', [ConnectionController::class, 'index'])->name('.index');
         Route::post('/send-request', [ConnectionController::class, 'sendRequest'])->name('.sendRequest');
+        Route::post('/accept-request', [ConnectionController::class, 'acceptRequest'])->name('.acceptRequest');
         Route::get('/delete', [ConnectionController::class, 'delete'])->name('.delete');
     });
 });

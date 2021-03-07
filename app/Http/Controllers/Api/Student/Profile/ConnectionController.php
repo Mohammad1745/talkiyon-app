@@ -50,4 +50,13 @@ class ConnectionController extends Controller
     {
         return response()->json( $this->service->sendRequest( $request));
     }
+
+    /**
+     * @param ConnectionRequest $request
+     * @return JsonResponse
+     */
+    public function acceptRequest (ConnectionRequest $request): JsonResponse
+    {
+        return response()->json( $this->service->acceptRequest( $request));
+    }
 }
