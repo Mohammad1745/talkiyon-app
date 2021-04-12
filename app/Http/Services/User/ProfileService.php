@@ -215,10 +215,17 @@ class ProfileService extends ResponseService
     public function acceptRequest (object $request): array
     {
         try {
+            DB::beginTransaction();
             $this->connectionService->create( $this->connectionService->connectionDataFormatter( Auth::id(), $request->only('connected_with', 'type')));
+            $this->connectionService->updateWhere( ['user_id' => Auth::id()], ['status' => STATUS_ACTIVE]);
+            $this->connectionService->updateWhere( ['connected_with' => Auth::id()], ['status' => STATUS_ACTIVE]);
 
-            return $this->response()->success(__('Connection Request has been sent successfully.'));
+            DB::commit();
+
+            return $this->response()->success(__('Connection Request has been accepted successfully.'));
         } catch (Exception $exception) {
+            DB::rollBack();
+
             return $this->response()->error( $exception->getMessage());
         }
     }
