@@ -205,6 +205,12 @@ class ProfileService extends ResponseService
     public function sendRequest (object $request): array
     {
         try {
+            $connection = $this->connectionService->lastWhere(['connected_with' => decrypt($request->connected_with)]);
+            if ($connection && $connection->status == STATUS_ACTIVE) {
+                return $this->response()->success(__('Already Connected!'));
+            } elseif ($connection && $connection->status == STATUS_PENDING) {
+                return $this->response()->success(__('Already Sent Request!'));
+            }
             $this->connectionService->create( $this->connectionService->connectionDataFormatter( Auth::id(), $request->only('connected_with', 'type')));
 
             return $this->response()->success(__('Connection Request has been sent successfully.'));
@@ -221,6 +227,12 @@ class ProfileService extends ResponseService
     {
         try {
             DB::beginTransaction();
+            $connection = $this->connectionService->lastWhere(['connected_with' => decrypt($request->connected_with)]);
+            if ($connection && $connection->status == STATUS_ACTIVE) {
+                return $this->response()->success(__('Already Connected!'));
+            } elseif ($connection && $connection->status == STATUS_PENDING) {
+                return $this->response()->success(__('Already Sent Request!'));
+            }
             $this->connectionService->create( $this->connectionService->connectionDataFormatter( Auth::id(), $request->only('connected_with', 'type')));
             $this->connectionService->updateWhere( ['user_id' => Auth::id()], ['status' => STATUS_ACTIVE]);
             $this->connectionService->updateWhere( ['connected_with' => Auth::id()], ['status' => STATUS_ACTIVE]);
