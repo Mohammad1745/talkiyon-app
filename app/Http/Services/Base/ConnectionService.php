@@ -29,7 +29,7 @@ class ConnectionService extends Service
         if ($request){
             return [
                 'user_id' => $userId,
-                'connected_with' => $request['connected_with'],
+                'connected_with' => decrypt($request['connected_with']),
                 'type' => $request['type'],
             ];
         }
