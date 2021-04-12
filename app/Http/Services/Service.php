@@ -124,6 +124,17 @@ class Service
     }
 
     /**
+     * @param array $whereNotIn
+     * @param array $where
+     * @param array $fields
+     * @return mixed
+     */
+    public function getWhereNotIn (array $whereNotIn, array $where=[], array $fields=[])
+    {
+        return $this->repository->getWhereNotIn( $whereNotIn, $where, $fields);
+    }
+
+    /**
      * @param array $where
      * @param int $pagination
      * @param array $fields

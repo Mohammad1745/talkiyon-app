@@ -110,7 +110,12 @@ class ProfileService extends ResponseService
     public function connectionSuggestions (object $request): array
     {
         try {
-            $connections = $this->_connectionList(STATUS_PENDING, $request);
+            $connections = $this->connectionService->pluckWhere(['connected_with'=>Auth::id()], 'user_id')->toArray();
+            $connections += $this->connectionService->pluckWhere(['user_id'=>Auth::id()], 'connected_with')->toArray();
+            $connections = $this->userService->getWhereNotIn(['field'=>'id', 'array'=>$connections], [], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'image'])->toArray();
+            foreach ($connections as $key => $item) {
+                $connections[$key]['id'] = encrypt($item['id']);
+            }
 
             return $this->response($connections)->success();
         } catch (Exception $exception) {

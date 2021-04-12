@@ -132,6 +132,24 @@ class Repository
     }
 
     /**
+     * @param array $whereNotIn
+     * @param array $where
+     * @param array $fields
+     * @return mixed
+     */
+    public function getWhereNotIn (array $whereNotIn, array $where=[], array $fields=[])
+    {
+        $collections = count($fields) ?
+            $this->model->select($fields):
+            $this->model;
+        $collections = count($where) ?
+            $collections->where( $where):
+            $collections;
+
+        return $collections->whereNotIn($whereNotIn['field'],$whereNotIn['array'])->get();
+    }
+
+    /**
      * @param array $where
      * @param int $pagination
      * @param array $fields
