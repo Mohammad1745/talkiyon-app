@@ -107,10 +107,50 @@ class ProfileService extends ResponseService
      * @param object $request
      * @return array
      */
-    public function connectionRequests (object $request): array
+    public function connectionSuggestions (object $request): array
     {
         try {
             $connections = $this->_connectionList(STATUS_PENDING, $request);
+
+            return $this->response($connections)->success();
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function sentRequests (object $request): array
+    {
+        try {
+            $connections = $this->_connectionList(STATUS_PENDING, $request);
+
+            return $this->response($connections)->success();
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function receivedRequests (object $request): array
+    {
+        try {
+            $connections = $request->has('type') ?
+                $this->connectionService->getWhere(['connected_with'=>Auth::id(), 'status'=>STATUS_PENDING, 'type'=>$request->type])->toArray():
+                $this->connectionService->getWhere(['connected_with'=>Auth::id(), 'status'=>STATUS_PENDING])->toArray();
+            $connections = $connections ? $connections : [];
+            foreach ($connections as $key => $item) {
+                $connections[$key]['id'] = encrypt($item['id']);
+                $connections[$key]['sender'] = $this->userService->lastWhere(['id' => $item['user_id']], ['id', 'first_name', 'last_name', 'email', 'username', 'phone', 'role', 'gender', 'image'])->toArray();
+                $connections[$key]['sender']['id'] = encrypt($connections[$key]['sender']['id']);
+                $connections[$key]['user_id'] = $connections[$key]['connected_with'];
+                $connections[$key]['connected_with'] = null;
+            }
 
             return $this->response($connections)->success();
         } catch (Exception $exception) {
