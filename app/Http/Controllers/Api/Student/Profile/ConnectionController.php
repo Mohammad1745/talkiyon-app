@@ -77,4 +77,13 @@ class ConnectionController extends Controller
     {
         return response()->json( $this->service->acceptRequest( $request));
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function delete(Request $request): JsonResponse
+    {
+        return response()->json( $this->service->delete( $request));
+    }
 }

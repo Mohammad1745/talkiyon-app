@@ -245,4 +245,28 @@ class ProfileService extends ResponseService
             return $this->response()->error( $exception->getMessage());
         }
     }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function delete (object $request): array
+    {
+        try {
+            $connection = $this->connectionService->lastWhere(['id' => decrypt($request->id), 'user_id' => Auth::id()]);
+            if (!$connection) {
+                return $this->response()->error( __('Connection not found'));
+            }
+            DB::beginTransaction();
+            $this->connectionService->deleteWhere( ['user_id' => $connection->user_id]);
+            $this->connectionService->deleteWhere( ['connected_with' => $connection->user_id]);
+            DB::commit();
+
+            return $this->response()->success(__('Connection has been deleted successfully.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
 }
