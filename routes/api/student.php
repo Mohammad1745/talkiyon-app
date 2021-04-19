@@ -23,7 +23,7 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::post('/save-image', [InformationController::class, 'saveImage'])->name('.saveImage');
     Route::post('/save-about', [InformationController::class, 'saveAbout'])->name('.saveAbout');
     //Connection
-    Route::prefix('connection')->name('.connection')->group( function () {
+    Route::prefix('/connection')->name('.connection')->group( function () {
         Route::get('/suggestions', [ConnectionController::class, 'suggestions'])->name('.suggestions');
         Route::get('/sent-requests', [ConnectionController::class, 'sentRequests'])->name('.sentRequests');
         Route::get('/received-requests', [ConnectionController::class, 'receivedRequests'])->name('.receivedRequests');
