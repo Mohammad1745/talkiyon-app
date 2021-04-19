@@ -22,12 +22,12 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::get('/info', [InformationController::class, 'info'])->name('.info');
     Route::post('/save-image', [InformationController::class, 'saveImage'])->name('.saveImage');
     Route::post('/save-about', [InformationController::class, 'saveAbout'])->name('.saveAbout');
-
+    //Connection
     Route::prefix('connection')->name('.connection')->group( function () {
         Route::get('/suggestions', [ConnectionController::class, 'suggestions'])->name('.suggestions');
         Route::get('/sent-requests', [ConnectionController::class, 'sentRequests'])->name('.sentRequests');
         Route::get('/received-requests', [ConnectionController::class, 'receivedRequests'])->name('.receivedRequests');
-        Route::get('/index', [ConnectionController::class, 'index'])->name('.index');
+        Route::get('/connections', [ConnectionController::class, 'connections'])->name('.connections');
         Route::post('/send-request', [ConnectionController::class, 'sendRequest'])->name('.sendRequest');
         Route::post('/accept-request', [ConnectionController::class, 'acceptRequest'])->name('.acceptRequest');
         Route::get('/delete', [ConnectionController::class, 'delete'])->name('.delete');
