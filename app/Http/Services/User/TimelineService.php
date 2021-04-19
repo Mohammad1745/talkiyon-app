@@ -3,6 +3,8 @@
 
 namespace App\Http\Services\User;
 
+use App\Http\Services\Base\TalkBooService;
+use App\Http\Services\Base\TalkClapService;
 use App\Http\Services\Base\TalkFileService;
 use App\Http\Services\Base\TalkService;
 use App\Http\Services\Base\UserService;
@@ -25,6 +27,14 @@ class TimelineService extends ResponseService
      * @var TalkFileService
      */
     private $talkFileService;
+    /**
+     * @var TalkClapService
+     */
+    private $talkClapService;
+    /**
+     * @var TalkBooService
+     */
+    private $talkBooService;
 
     /**
      * TimelineService constructor.
@@ -32,11 +42,13 @@ class TimelineService extends ResponseService
      * @param TalkService $talkService
      * @param TalkFileService $talkFileService
      */
-    public function __construct (UserService $userService, TalkService $talkService, TalkFileService $talkFileService)
+    public function __construct (UserService $userService, TalkService $talkService, TalkFileService $talkFileService, TalkClapService $talkClapService, TalkBooService $talkBooService)
     {
         $this->userService = $userService;
         $this->talkService = $talkService;
         $this->talkFileService = $talkFileService;
+        $this->talkClapService = $talkClapService;
+        $this->talkBooService = $talkBooService;
     }
 
     /**
@@ -161,6 +173,66 @@ class TimelineService extends ResponseService
 
             return $this->response()->success(__('Talk has been deleted successfully.'));
         } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function clap (object $request): array
+    {
+        try {
+            $talk = $this->talkService->lastWhere(['id' => decrypt($request->talk_id), 'user_id' => Auth::id()]);
+            if (!$talk) {
+                return $this->response()->error( __('Talk not found'));
+            }
+            $clap = $this->talkClapService->lastWhere(['user_id' => Auth::id()]);
+            if($clap){
+                $this->talkClapService->deleteWhere(['id' => $clap->id]);
+
+                return $this->response()->success(__('Clap removed from the talk.'));
+            }
+            DB::beginTransaction();
+            $this->talkClapService->create($this->talkClapService->talkClapDataFormatter($request->only('talk_id')));
+            $this->talkBooService->deleteWhere(['talk_id' => decrypt($request->talk_id)]);
+            DB::commit();
+
+            return $this->response()->success(__('Clapped for the talk.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function boo (object $request): array
+    {
+        try {
+            $talk = $this->talkService->lastWhere(['id' => decrypt($request->talk_id), 'user_id' => Auth::id()]);
+            if (!$talk) {
+                return $this->response()->error( __('Talk not found'));
+            }
+            $boo = $this->talkBooService->lastWhere(['user_id' => Auth::id()]);
+            if($boo){
+                $this->talkBooService->deleteWhere(['id' => $boo->id]);
+
+                return $this->response()->success(__('Boo removed from the talk.'));
+            }
+            DB::beginTransaction();
+            $this->talkBooService->create($this->talkBooService->talkBooDataFormatter($request->only('talk_id')));
+            $this->talkClapService->deleteWhere(['talk_id' => decrypt($request->talk_id)]);
+            DB::commit();
+
+            return $this->response()->success(__('Booed for the talk.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
             return $this->response()->error( $exception->getMessage());
         }
     }

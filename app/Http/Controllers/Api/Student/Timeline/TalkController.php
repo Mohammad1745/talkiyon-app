@@ -77,4 +77,22 @@ class TalkController extends Controller
     {
         return response()->json( $this->service->delete( $request));
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function clap(Request $request): JsonResponse
+    {
+        return response()->json( $this->service->clap( $request));
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function boo(Request $request): JsonResponse
+    {
+        return response()->json( $this->service->boo( $request));
+    }
 }
