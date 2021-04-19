@@ -86,6 +86,7 @@ class TimelineService extends ResponseService
                 $item['files'] = $this->talkFileService->pluckWhere(['talk_id'=>$item['id']], 'file');
                 $item["encrypted_id"] = encrypt($item['id']);
                 $item["user_id"] = encrypt($item['user_id']);
+                $item["id"] = null;
             });
 
             return $this->response($talks->toArray())->success();

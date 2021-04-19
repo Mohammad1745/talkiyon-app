@@ -41,4 +41,10 @@ Route::prefix('talk')->name('talk')->group(function () {
     Route::get('/read', [TalkController::class, 'read'])->name('.read');
     Route::post('/update', [TalkController::class, 'update'])->name('.update');
     Route::get('/delete', [TalkController::class, 'delete'])->name('.delete');
+
+    Route::get('/react', [TalkController::class, 'react'])->name('.react');
+    Route::get('/respond', [TalkController::class, 'respond'])->name('.respond');
+    Route::post('/share', [TalkController::class, 'share'])->name('.share');
+    Route::post('/update-response', [TalkController::class, 'updateResponse'])->name('.updateResponse');
+    Route::get('/delete-response', [TalkController::class, 'deleteResponse'])->name('.deleteResponse');
 });
