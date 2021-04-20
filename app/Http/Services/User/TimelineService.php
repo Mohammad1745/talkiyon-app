@@ -6,6 +6,10 @@ namespace App\Http\Services\User;
 use App\Http\Services\Base\TalkBooService;
 use App\Http\Services\Base\TalkClapService;
 use App\Http\Services\Base\TalkFileService;
+use App\Http\Services\Base\TalkResponseBooService;
+use App\Http\Services\Base\TalkResponseClapService;
+use App\Http\Services\Base\TalkResponseFileService;
+use App\Http\Services\Base\TalkResponseService;
 use App\Http\Services\Base\TalkService;
 use App\Http\Services\Base\UserService;
 use App\Http\Services\ResponseService;
@@ -35,20 +39,48 @@ class TimelineService extends ResponseService
      * @var TalkBooService
      */
     private $talkBooService;
+    /**
+     * @var TalkResponseService
+     */
+    private $talkResponseService;
+    /**
+     * @var TalkResponseFileService
+     */
+    private $talkResponseFileService;
+    /**
+     * @var TalkResponseClapService
+     */
+    private $talkResponseClapService;
+    /**
+     * @var TalkResponseBooService
+     */
+    private $talkResponseBooService;
 
     /**
      * TimelineService constructor.
      * @param UserService $userService
      * @param TalkService $talkService
      * @param TalkFileService $talkFileService
+     * @param TalkClapService $talkClapService
+     * @param TalkBooService $talkBooService
+     * @param TalkResponseService $talkResponseService
+     * @param TalkResponseFileService $talkResponseFileService
+     * @param TalkResponseClapService $talkResponseClapService
+     * @param TalkResponseBooService $talkResponseBooService
      */
-    public function __construct (UserService $userService, TalkService $talkService, TalkFileService $talkFileService, TalkClapService $talkClapService, TalkBooService $talkBooService)
+    public function __construct (UserService $userService, TalkService $talkService, TalkFileService $talkFileService, TalkClapService $talkClapService,
+                                 TalkBooService $talkBooService, TalkResponseService $talkResponseService, TalkResponseFileService $talkResponseFileService,
+                                 TalkResponseClapService $talkResponseClapService, TalkResponseBooService $talkResponseBooService)
     {
         $this->userService = $userService;
         $this->talkService = $talkService;
         $this->talkFileService = $talkFileService;
         $this->talkClapService = $talkClapService;
         $this->talkBooService = $talkBooService;
+        $this->talkResponseService = $talkResponseService;
+        $this->talkResponseFileService = $talkResponseFileService;
+        $this->talkResponseClapService = $talkResponseClapService;
+        $this->talkResponseBooService = $talkResponseBooService;
     }
 
     /**
@@ -230,6 +262,34 @@ class TimelineService extends ResponseService
             DB::commit();
 
             return $this->response()->success(__('Booed for the talk.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function respond (object $request): array
+    {
+        try {
+            $talkResponse = $this->talkService->lastWhere(['id' => decrypt($request->talk_id)]);
+            if (!$talkResponse) {
+                return $this->response()->error( __('Talk not found'));
+            }
+            DB::beginTransaction();
+            $talkResponse = $this->talkResponseService->create( $this->talkResponseService->talkResponseDataFormatter($request->all()));
+            if ($request->has(['files'])) {
+                foreach ($request->all()['files'] as $file) {
+                    $this->talkResponseFileService->create( $this->talkResponseFileService->talkResponseFileDataFormatter( $talkResponse->id, ['file' => uploadFile( $file, timelinePath())]));
+                }
+            }
+            DB::commit();
+
+            return $this->response()->success(__('Responded to the Talk.'));
         } catch (Exception $exception) {
             DB::rollBack();
 

@@ -17,7 +17,7 @@ class CreateTalkResponseTable extends Migration
             $table->id();
             $table->unsignedBigInteger('talk_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('parent_id');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->text('content')->nullable();
             $table->timestamps();
 
