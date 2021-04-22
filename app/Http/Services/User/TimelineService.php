@@ -128,6 +128,10 @@ class TimelineService extends ResponseService
             $talks = $this->talkService->paginateWhere(['user_id'=>Auth::id()]);
             $talks->map(function ($item) {
                 $item['files'] = $this->talkFileService->pluckWhere(['talk_id'=>$item['id']], 'file');
+                $item['claps'] = $this->talkClapService->countWhere(['talk_id'=>$item['id']]);
+                $item['boos'] = $this->talkBooService->countWhere(['talk_id'=>$item['id']]);
+                $item['responses'] = $this->talkResponseService->countWhere(['talk_id'=>$item['id']]);
+                $item['last_response'] = $this->talkResponseService->lastWhere(['talk_id'=>$item['id'], 'parent_id' => null], ['content']);
                 $item["encrypted_id"] = encrypt($item['id']);
                 $item["user_id"] = encrypt($item['user_id']);
                 $item["id"] = null;
@@ -152,10 +156,65 @@ class TimelineService extends ResponseService
             }
             $talk['encrypted_id'] = encrypt($talk['id']);
             $talk['files'] = $this->talkFileService->pluckWhere(['talk_id'=>$talk['id']], 'file');
+            $talk['claps'] = $this->talkClapService->countWhere(['talk_id'=>$talk['id']]);
+            $talk['boos'] = $this->talkBooService->countWhere(['talk_id'=>$talk['id']]);
+            $talk['responses'] = $this->talkResponseService->countWhere(['talk_id'=>$talk['id']]);
+            $talk['all_response'] = $this->_responses($talk['id']);
+            unset($talk['id']);
 
             return $this->response($talk->toArray())->success();
         } catch (Exception $exception) {
             return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param int $talkId
+     * @return array
+     */
+    private function _responses (int $talkId): array
+    {
+        $responses = $this->talkResponseService->getWhere(['talk_id'=>$talkId, 'parent_id' => null], ['id','user_id', 'content'])->toArray();
+        $responses = $responses ? $responses : [];
+        foreach ($responses as $key => $item) {
+            $responses[$key]['replies'] = $this->_replies([
+                'id' => $item['id'],
+                'user_id' => $item['user_id']
+            ]);
+            $user = $this->userService->lastWhere(['id' => $item['user_id']])->toArray();
+            $responses[$key]['replied_by'] = $user['first_name'].' '.$user['last_name'];
+            $responses[$key]['user_id'] = encrypt($item['user_id']);
+            $responses[$key]['id'] = encrypt($item['id']);
+        }
+        return $responses;
+    }
+
+    /**
+     * @param array $parent
+     * @return array
+     */
+    private function _replies (array $parent): array
+    {
+        $encrypted = encrypt($parent['id']);
+        $parentUser = $this->userService->lastWhere(['id' => $parent['user_id']])->toArray();
+        $replies = $this->talkResponseService->getWhere(['parent_id'=>$parent['id']], ['id', 'parent_id', 'user_id', 'content'])->toArray();
+        if (count($replies)==0) return [];
+        else {
+            foreach ($replies as $key => $reply) {
+                $user = $this->userService->lastWhere(['id' => $reply['user_id']])->toArray();
+                $replies[$key]['replied_by'] = $user['first_name'].' '.$user['last_name'];
+                $replies[$key]['replied_to'] = $parentUser['first_name'].' '.$parentUser['last_name'];
+                $replies[$key]['parent_id'] = $encrypted;
+            }
+            foreach ($replies as $key => $reply) {
+                $replies = array_merge($replies, $this->_replies([
+                    'id' => $reply['id'],
+                    'user_id' => $reply['user_id']
+                ]));
+                $replies[$key]['user_id'] = encrypt($reply['user_id']);
+                $replies[$key]['id'] = encrypt($reply['id']);
+            }
+            return $replies;
         }
     }
 
@@ -289,7 +348,7 @@ class TimelineService extends ResponseService
             }
             DB::commit();
 
-            return $this->response()->success(__('Responded to the Talk.'));
+            return $this->response()->success(__(isset($request->parent_id) ? 'Replied to the Response.' : 'Responded to the Talk.'));
         } catch (Exception $exception) {
             DB::rollBack();
 
