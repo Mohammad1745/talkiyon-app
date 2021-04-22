@@ -10,7 +10,7 @@ use Twilio\Rest\Client;
 
 const API_SECRET_KEY = 'EH5m5%$+3V$7Ue4j3*Kc5UzA4Mq7TXEt8a!8^AJ#';
 
-function authUser(): ?Authenticatable
+function authUser (): ?Authenticatable
 {
     return Auth::user();
 }
@@ -19,7 +19,7 @@ function authUser(): ?Authenticatable
  * @param null $array
  * @return array|bool
  */
-//function adminSetting($array = null)
+//function adminSetting ($array = null)
 //{
 //    if (!isset($array[0])) {
 //        $adminSettings = AdminSetting::get();
@@ -63,7 +63,7 @@ function authUser(): ?Authenticatable
  * @throws ConfigurationException
  * @throws TwilioException
  */
-function sendSMS(string $message, string $recipients)
+function sendSMS (string $message, string $recipients)
 {
     $account_sid = getenv("TWILIO_SID");
     $auth_token = getenv("TWILIO_AUTH_TOKEN");
@@ -78,7 +78,7 @@ function sendSMS(string $message, string $recipients)
  * @param null $oldFile
  * @return bool|string
  */
-function uploadFile($file, $destinationPath, $oldFile = null)
+function uploadFile ($file, $destinationPath, $oldFile = null)
 {
     if ($oldFile != null) {
         deleteFile($destinationPath, $oldFile);
@@ -97,7 +97,7 @@ function uploadFile($file, $destinationPath, $oldFile = null)
  * @param $destinationPath
  * @param $file
  */
-function deleteFile($destinationPath, $file)
+function deleteFile ($destinationPath, $file)
 {
     if ($file != null) {
         try {
@@ -112,7 +112,7 @@ function deleteFile($destinationPath, $file)
  * @param $subject
  * @return false|int
  */
-function isPhone($subject)
+function isPhone ($subject)
 {
     return preg_match('/^(01){1}[1-9]{1}[0-9]{8}$/', $subject);
 }
@@ -121,7 +121,7 @@ function isPhone($subject)
  * @param string $input
  * @return string
  */
-function strtosnake(string $input): string
+function strtosnake (string $input): string
 {
     $output ='';
     $index = 0;
@@ -138,7 +138,7 @@ function strtosnake(string $input): string
  * @param null $input
  * @return array|mixed
  */
-function numbersMultipliers($input = null)
+function numbersMultipliers ($input = null)
 {
     $output = [
         THOUSAND => __('K'),
@@ -160,7 +160,7 @@ function numbersMultipliers($input = null)
  * @param int $precision
  * @return float|int|mixed|string
  */
-function convertToMultiplier($input=0, $precision=2){
+function convertToMultiplier ($input=0, $precision=2){
     if($input>0){
         return $input>=QUADRILLION ? round($input/QUADRILLION, $precision).' '.numbersMultipliers(QUADRILLION) :
             ($input>=TRILLION ? round($input/TRILLION, $precision).' '.numbersMultipliers(TRILLION) :
@@ -174,7 +174,7 @@ function convertToMultiplier($input=0, $precision=2){
 /**
  * @return string
  */
-function logoPath()
+function logoPath ()
 {
     return 'public/logo/';
 }
@@ -182,7 +182,7 @@ function logoPath()
 /**
  * @return string
  */
-function logoViewPath()
+function logoViewPath ()
 {
     return 'storage/logo/';
 }
@@ -190,7 +190,7 @@ function logoViewPath()
 /**
  * @return string
  */
-function documentManualPath()
+function documentManualPath ()
 {
     return 'public/document-manual/';
 }
@@ -198,7 +198,7 @@ function documentManualPath()
 /**
  * @return string
  */
-function documentManualViewPath()
+function documentManualViewPath ()
 {
     return '/storage/document-manual/';
 }
@@ -206,7 +206,7 @@ function documentManualViewPath()
 /**
  * @return string
  */
-function timelinePath()
+function timelinePath ()
 {
     return 'public/timeline/';
 }
@@ -214,7 +214,7 @@ function timelinePath()
 /**
  * @return string
  */
-function timelineViewPath()
+function timelineViewPath ()
 {
     return '/storage/timeline/';
 }
@@ -222,7 +222,7 @@ function timelineViewPath()
 /**
  * @return string
  */
-function avatarPath()
+function avatarPath ()
 {
     return 'public/avatar/';
 }
@@ -230,7 +230,7 @@ function avatarPath()
 /**
  * @return string
  */
-function avatarViewPath()
+function avatarViewPath ()
 {
     return 'storage/avatar/';
 }
@@ -239,7 +239,7 @@ function avatarViewPath()
  * @param null $input
  * @return string|string[]
  */
-function weekDays($input = null)
+function weekDays ($input = null)
 {
     $output = [
         1 => 'Monday',
@@ -261,7 +261,7 @@ function weekDays($input = null)
 /**
  * @return int
  */
-function thisDay()
+function thisDay ()
 {
     return Carbon::now()->day;
 }
@@ -269,7 +269,7 @@ function thisDay()
 /**
  * @return int
  */
-function thisMonth()
+function thisMonth ()
 {
     return Carbon::now()->month;
 }
@@ -277,7 +277,7 @@ function thisMonth()
 /**
  * @return int
  */
-function thisYear()
+function thisYear ()
 {
     return Carbon::now()->year;
 }
@@ -286,7 +286,7 @@ function thisYear()
  * @param null $input
  * @return string|string[]
  */
-function monthsOfYear($input = null)
+function monthsOfYear ($input = null)
 {
     $output = [
         1 => 'January',
@@ -315,7 +315,7 @@ function monthsOfYear($input = null)
  * @param null $year
  * @return int|int[]
  */
-function daysOfMonth($input = null, $year=null)
+function daysOfMonth ($input = null, $year=null)
 {
     $year = is_null($year) ? thisYear() : $year;
     $output = [
@@ -344,7 +344,7 @@ function daysOfMonth($input = null, $year=null)
  * @param null $input
  * @return array|mixed
  */
-function weekDaysWithLanguage($input = null)
+function weekDaysWithLanguage ($input = null)
 {
     $output = [
         1 => __('Monday'),
@@ -367,7 +367,7 @@ function weekDaysWithLanguage($input = null)
  * @param int $length
  * @return string
  */
-function randomNumber($length = 10)
+function randomNumber ($length = 10)
 {
     $x = '123456789';
     $c = strlen($x) - 1;
@@ -385,7 +385,7 @@ function randomNumber($length = 10)
  * @param null $input
  * @return string|string[]
  */
-function bloodGroups($input = null)
+function bloodGroups ($input = null)
 {
     $bloodGroups = [
         "1" => "A+",
@@ -409,7 +409,7 @@ function bloodGroups($input = null)
  * @param null $input
  * @return array|mixed
  */
-function userRoles($input = null)
+function userRoles ($input = null)
 {
     $output = [
         ADMIN_ROLE => __('Admin'),
@@ -428,7 +428,7 @@ function userRoles($input = null)
  * @param null $input
  * @return array|mixed
  */
-function accountTypes($input = null)
+function accountTypes ($input = null)
 {
     $output = [
         STUDENT_ROLE => __('Student'),
@@ -445,7 +445,7 @@ function accountTypes($input = null)
  * @param null $input
  * @return array
  */
-function genders ($input = null)
+function genders  ($input = null)
 {
     $output = [
         SEX_MALE => __('Male'),
@@ -464,7 +464,7 @@ function genders ($input = null)
  * @param null $input
  * @return array|mixed
  */
-function connections ($input = null)
+function connections  ($input = null)
 {
     $output = [
         CONNECTION_TYPE_FRIEND => __('Friend'),
@@ -484,7 +484,7 @@ function connections ($input = null)
  * @param null $input
  * @return array|mixed
  */
-function connectionTypes ($input = null)
+function connectionTypes  ($input = null)
 {
     $output = [
         CONNECTION_TYPE_ALL => __('All'),
@@ -506,7 +506,7 @@ function connectionTypes ($input = null)
  * @param null $input
  * @return array|mixed
  */
-function connectionStatuses ($input = null)
+function connectionStatuses  ($input = null)
 {
     $output = [
         STATUS_PENDING => __('Pending'),
@@ -525,7 +525,7 @@ function connectionStatuses ($input = null)
  * @param null $input
  * @return array|mixed
  */
-function talkTypes ($input = null)
+function talkTypes  ($input = null)
 {
     $output = [
         TALK_TYPE_TALKIYON_OFFICIAL => __('Talkiyon Official'),
@@ -543,7 +543,7 @@ function talkTypes ($input = null)
  * @param null $input
  * @return array|mixed
  */
-function talkFileTypes ($input = null)
+function talkFileTypes  ($input = null)
 {
     $output = [
         TALK_FILE_TYPE_IMAGE => __('Image'),
@@ -562,7 +562,7 @@ function talkFileTypes ($input = null)
  * @param null $input
  * @return array|mixed
  */
-function talkSecurityTypes ($input = null)
+function talkSecurityTypes  ($input = null)
 {
     $output = [
         TALK_SECURITY_TYPE_PUBLIC => __('Public'),
@@ -581,7 +581,7 @@ function talkSecurityTypes ($input = null)
  * @param null $input
  * @return array|mixed
  */
-function paymentMethods($input = null)
+function paymentMethods ($input = null)
 {
     $output = [
         PAYMENT_METHOD_BKASH => __('Bkash'),
@@ -601,7 +601,7 @@ function paymentMethods($input = null)
  * @param null $input
  * @return array|mixed
  */
-function bankTransactionTypes($input = null)
+function bankTransactionTypes ($input = null)
 {
     $output = [
         BANK_TRANSACTION_TYPE_ADDITION => __('Addition'),
@@ -619,7 +619,7 @@ function bankTransactionTypes($input = null)
  * @param null $input
  * @return array|mixed
  */
-function feedbackTypes($input = null)
+function feedbackTypes ($input = null)
 {
     $output = [
         FEEDBACK_TYPE_SUGGESTION => __('Suggestion'),
