@@ -22,6 +22,7 @@ class CreateTalkResponseTable extends Migration
             $table->timestamps();
 
             $table->foreign('talk_id')->references('id')->on('talk')->onDelete('cascade');
+            $table->foreign('parent_id')->references('id')->on('talk_response')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
         });
     }
