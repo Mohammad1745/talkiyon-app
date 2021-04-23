@@ -182,6 +182,8 @@ class TimelineService extends ResponseService
                 'user_id' => $item['user_id']
             ]);
             $user = $this->userService->lastWhere(['id' => $item['user_id']])->toArray();
+            $responses[$key]['claps'] = $this->talkResponseClapService->countWhere(['response_id'=>$item['id']]);
+            $responses[$key]['boos'] = $this->talkResponseBooService->countWhere(['response_id'=>$item['id']]);
             $responses[$key]['replied_by'] = $user['first_name'].' '.$user['last_name'];
             $responses[$key]['user_id'] = encrypt($item['user_id']);
             $responses[$key]['id'] = encrypt($item['id']);
@@ -202,6 +204,8 @@ class TimelineService extends ResponseService
         else {
             foreach ($replies as $key => $reply) {
                 $user = $this->userService->lastWhere(['id' => $reply['user_id']])->toArray();
+                $replies[$key]['claps'] = $this->talkResponseClapService->countWhere(['response_id'=>$reply['id']]);
+                $replies[$key]['boos'] = $this->talkResponseBooService->countWhere(['response_id'=>$reply['id']]);
                 $replies[$key]['replied_by'] = $user['first_name'].' '.$user['last_name'];
                 $replies[$key]['replied_to'] = $parentUser['first_name'].' '.$parentUser['last_name'];
                 $replies[$key]['parent_id'] = $encrypted;
