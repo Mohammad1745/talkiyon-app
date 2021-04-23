@@ -414,4 +414,70 @@ class TimelineService extends ResponseService
             return $this->response()->error( $exception->getMessage());
         }
     }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function clapToResponse (object $request): array
+    {
+        try {
+            $response = $this->talkResponseService->lastWhere([
+                'id' => decrypt($request->response_id),
+                'talk_id' => decrypt($request->talk_id),
+            ]);
+            if (!$response) {
+                return $this->response()->error( __('Response not found'));
+            }
+            $clap = $this->talkResponseClapService->lastWhere(['response_id' => $response['id'], 'user_id' => Auth::id()]);
+            if($clap){
+                $this->talkResponseClapService->deleteWhere(['id' => $clap['id']]);
+
+                return $this->response()->success(__('Clap removed from the response.'));
+            }
+            DB::beginTransaction();
+            $this->talkResponseClapService->create($this->talkResponseClapService->talkResponseClapDataFormatter($request->only('response_id')));
+            $this->talkResponseBooService->deleteWhere(['response_id' => $response['id']]);
+            DB::commit();
+
+            return $this->response()->success(__('Clapped for the response.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function booToResponse (object $request): array
+    {
+        try {
+            $response = $this->talkResponseService->lastWhere([
+                'id' => decrypt($request->response_id),
+                'talk_id' => decrypt($request->talk_id),
+            ]);
+            if (!$response) {
+                return $this->response()->error( __('Response not found'));
+            }
+            $boo = $this->talkResponseBooService->lastWhere(['response_id' => $response['id'], 'user_id' => Auth::id()]);
+            if($boo){
+                $this->talkResponseBooService->deleteWhere(['id' => $boo['id']]);
+
+                return $this->response()->success(__('Boo removed from the response.'));
+            }
+            DB::beginTransaction();
+            $this->talkResponseBooService->create($this->talkResponseBooService->talkResponseBooDataFormatter($request->only('response_id')));
+            $this->talkResponseClapService->deleteWhere(['response_id' => $response['id']]);
+            DB::commit();
+
+            return $this->response()->success(__('Booed for the response.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
 }

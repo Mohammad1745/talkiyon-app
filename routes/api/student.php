@@ -48,4 +48,6 @@ Route::prefix('talk')->name('talk')->group(function () {
 //    Route::post('/share', [TalkController::class, 'share'])->name('.share');
     Route::post('/update-response', [TalkController::class, 'updateResponse'])->name('.updateResponse');
     Route::get('/delete-response', [TalkController::class, 'deleteResponse'])->name('.deleteResponse');
+    Route::get('/clap-to-response', [TalkController::class, 'clapToResponse'])->name('.clapToResponse');
+    Route::get('/boo-to-response', [TalkController::class, 'booToResponse'])->name('.booToResponse');
 });
