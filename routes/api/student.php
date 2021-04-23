@@ -46,6 +46,6 @@ Route::prefix('talk')->name('talk')->group(function () {
     Route::get('/boo', [TalkController::class, 'boo'])->name('.boo');
     Route::post('/respond', [TalkController::class, 'respond'])->name('.respond');
 //    Route::post('/share', [TalkController::class, 'share'])->name('.share');
-//    Route::post('/update-response', [TalkController::class, 'updateResponse'])->name('.updateResponse');
+    Route::post('/update-response', [TalkController::class, 'updateResponse'])->name('.updateResponse');
 //    Route::get('/delete-response', [TalkController::class, 'deleteResponse'])->name('.deleteResponse');
 });

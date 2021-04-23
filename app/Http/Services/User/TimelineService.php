@@ -159,6 +159,7 @@ class TimelineService extends ResponseService
             $talk['boos'] = $this->talkBooService->countWhere(['talk_id'=>$talk['id']]);
             $talk['responses'] = $this->talkResponseService->countWhere(['talk_id'=>$talk['id']]);
             $talk['all_response'] = $this->_responses($talk['id']);
+            $talk['user_id'] = encrypt($talk['user_id']);
             $talk['id'] = encrypt($talk['id']);
 
             return $this->response($talk)->success();
@@ -348,6 +349,43 @@ class TimelineService extends ResponseService
             DB::commit();
 
             return $this->response()->success(__(isset($request->parent_id) ? 'Replied to the Response.' : 'Responded to the Talk.'));
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
+
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function updateResponse (object $request): array
+    {
+        try {
+            DB::beginTransaction();
+            $response = $this->talkResponseService->lastWhere([
+                'id' => decrypt($request->id),
+                'talk_id' => decrypt($request->talk_id),
+                'parent_id' => decrypt($request->parent_id),
+                'user_id' => Auth::id()
+            ]);
+            if (!$response) {
+                DB::rollBack();
+
+                return $this->response()->error( __('Response not found'));
+            }
+            $this->talkResponseFileService->deleteWhere(['response_id' => $response->id]);
+            $this->talkResponseService->updateWhere(['id' => $response->id], $this->talkResponseService->talkResponseDataFormatter( $request->all()));
+            if ($request->has(['files'])) {
+                foreach ($request->all()['files'] as $file) {
+                    $this->talkResponseFileService->create( $this->talkResponseFileService->talkResponseFileDataFormatter( $response->id, ['file' => uploadFile( $file, timelinePath())]));
+                }
+            }
+            DB::commit();
+
+            return $this->response()->success(__('Response has been updated successfully.'));
         } catch (Exception $exception) {
             DB::rollBack();
 
