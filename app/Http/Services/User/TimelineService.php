@@ -175,7 +175,7 @@ class TimelineService extends ResponseService
     private function _responses (int $talkId): array
     {
         $responses = $this->talkResponseService->getWhere(['talk_id'=>$talkId, 'parent_id' => null], ['id','user_id', 'content'])->toArray();
-        $responses = $responses ? $responses : [];
+        $responses = $responses ?? [];
         foreach ($responses as $key => $item) {
             $responses[$key]['replies'] = $this->_replies([
                 'id' => $item['id'],
