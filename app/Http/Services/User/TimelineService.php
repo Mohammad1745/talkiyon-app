@@ -392,4 +392,26 @@ class TimelineService extends ResponseService
             return $this->response()->error( $exception->getMessage());
         }
     }
+
+    /**
+     * @param object $request
+     * @return array
+     */
+    public function deleteResponse (object $request): array
+    {
+        try {
+            $response = $this->talkResponseService->lastWhere([
+                'id' => decrypt($request->id),
+                'talk_id' => decrypt($request->talk_id),
+                'user_id' => Auth::id()]);
+            if (!$response) {
+                return $this->response()->error( __('Response not found'));
+            }
+            $this->talkResponseService->deleteWhere(['id' => $response->id]);
+
+            return $this->response()->success(__('Response has been deleted successfully.'));
+        } catch (Exception $exception) {
+            return $this->response()->error( $exception->getMessage());
+        }
+    }
 }

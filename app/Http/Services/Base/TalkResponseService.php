@@ -30,7 +30,7 @@ class TalkResponseService extends Service
             return [
                 'talk_id' => decrypt($request['talk_id']),
                 'user_id' => Auth::id(),
-                'parent_id' => $request['parent_id'] ? decrypt($request['parent_id']) : null,
+                'parent_id' => isset($request['parent_id']) ? decrypt($request['parent_id']) : null,
                 'content' => $request['content']
             ];
         }
