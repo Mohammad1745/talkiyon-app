@@ -150,19 +150,18 @@ class TimelineService extends ResponseService
     public function read (object $request): array
     {
         try {
-            $talk = $this->talkService->lastWhere(['id'=> decrypt($request->id), 'user_id'=>Auth::id()]);
+            $talk = $this->talkService->lastWhere(['id'=> decrypt($request->id), 'user_id'=>Auth::id()])->toArray();
             if (!$talk) {
                 return $this->response()->error( __('Talk not found'));
             }
-            $talk['encrypted_id'] = encrypt($talk['id']);
             $talk['files'] = $this->talkFileService->pluckWhere(['talk_id'=>$talk['id']], 'file');
             $talk['claps'] = $this->talkClapService->countWhere(['talk_id'=>$talk['id']]);
             $talk['boos'] = $this->talkBooService->countWhere(['talk_id'=>$talk['id']]);
             $talk['responses'] = $this->talkResponseService->countWhere(['talk_id'=>$talk['id']]);
             $talk['all_response'] = $this->_responses($talk['id']);
-            unset($talk['id']);
+            $talk['id'] = encrypt($talk['id']);
 
-            return $this->response($talk->toArray())->success();
+            return $this->response($talk)->success();
         } catch (Exception $exception) {
             return $this->response()->error( $exception->getMessage());
         }
