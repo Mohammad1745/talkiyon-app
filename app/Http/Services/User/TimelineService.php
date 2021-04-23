@@ -368,7 +368,7 @@ class TimelineService extends ResponseService
             $response = $this->talkResponseService->lastWhere([
                 'id' => decrypt($request->id),
                 'talk_id' => decrypt($request->talk_id),
-                'parent_id' => decrypt($request->parent_id),
+                'parent_id' => $request->parent_id ? decrypt($request->parent_id) : null,
                 'user_id' => Auth::id()
             ]);
             if (!$response) {
