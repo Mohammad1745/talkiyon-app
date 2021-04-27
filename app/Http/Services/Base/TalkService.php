@@ -30,7 +30,7 @@ class TalkService extends Service
             return [
                 'user_id' => $userId,
                 'content' => $request['content'],
-                'parent_id' => isset($request['parent_id']) ? $request['parent_id'] : null,
+                'parent_id' => isset($request['parent_id']) ? decrypt($request['parent_id']) : null,
                 'type' => $request['type'],
                 'security_type' => $request['security_type']
             ];

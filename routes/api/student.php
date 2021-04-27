@@ -36,6 +36,7 @@ Route::prefix('profile')->name('profile')->group(function () {
 //Timeline
 Route::prefix('talk')->name('talk')->group(function () {
     Route::get('/helpers', [TalkController::class, 'helpers'])->name('.helpers');
+    Route::post('/share', [TalkController::class, 'share'])->name('.share');
     Route::post('/present', [TalkController::class, 'present'])->name('.present');
     Route::get('/index', [TalkController::class, 'index'])->name('.index');
     Route::get('/read', [TalkController::class, 'read'])->name('.read');
@@ -45,7 +46,6 @@ Route::prefix('talk')->name('talk')->group(function () {
     Route::get('/clap', [TalkController::class, 'clap'])->name('.clap');
     Route::get('/boo', [TalkController::class, 'boo'])->name('.boo');
     Route::post('/respond', [TalkController::class, 'respond'])->name('.respond');
-//    Route::post('/share', [TalkController::class, 'share'])->name('.share');
     Route::post('/update-response', [TalkController::class, 'updateResponse'])->name('.updateResponse');
     Route::get('/delete-response', [TalkController::class, 'deleteResponse'])->name('.deleteResponse');
     Route::get('/clap-to-response', [TalkController::class, 'clapToResponse'])->name('.clapToResponse');

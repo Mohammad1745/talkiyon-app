@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Student\Timeline;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Timeline\PresentTalkRequest;
 use App\Http\Requests\Api\Timeline\RespondTalkRequest;
+use App\Http\Requests\Api\Timeline\ShareTalkRequest;
 use App\Http\Requests\Api\Timeline\UpdateResponseRequest;
 use App\Http\Requests\Api\Timeline\UpdateTalkRequest;
 use App\Http\Services\User\TimelineService;
@@ -41,6 +42,15 @@ class TalkController extends Controller
      * @return JsonResponse
      */
     public function present (PresentTalkRequest $request): JsonResponse
+    {
+        return response()->json( $this->service->present( $request));
+    }
+
+    /**
+     * @param ShareTalkRequest $request
+     * @return JsonResponse
+     */
+    public function share(ShareTalkRequest $request): JsonResponse
     {
         return response()->json( $this->service->present( $request));
     }

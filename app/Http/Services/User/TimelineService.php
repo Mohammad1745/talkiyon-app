@@ -111,7 +111,7 @@ class TimelineService extends ResponseService
             }
             DB::commit();
 
-            return $this->response()->success(__('Talk has been presented successfully.'));
+            return $this->response()->success(__('Talk has been '. ($request->has('parent_id')? 'shared' : 'presented' ) .' successfully.'));
         } catch (Exception $exception) {
             DB::rollBack();
 
