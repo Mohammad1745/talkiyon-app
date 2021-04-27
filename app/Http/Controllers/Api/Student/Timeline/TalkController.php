@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Student\Timeline;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Timeline\PresentTalkRequest;
+use App\Http\Requests\Api\Timeline\ReplyRespondTalkRequest;
 use App\Http\Requests\Api\Timeline\RespondTalkRequest;
 use App\Http\Requests\Api\Timeline\ShareTalkRequest;
 use App\Http\Requests\Api\Timeline\UpdateResponseRequest;
@@ -113,6 +114,15 @@ class TalkController extends Controller
      * @return JsonResponse
      */
     public function respond(RespondTalkRequest $request): JsonResponse
+    {
+        return response()->json( $this->service->respond( $request));
+    }
+
+    /**
+     * @param ReplyRespondTalkRequest $request
+     * @return JsonResponse
+     */
+    public function replyToResponse(ReplyRespondTalkRequest $request): JsonResponse
     {
         return response()->json( $this->service->respond( $request));
     }

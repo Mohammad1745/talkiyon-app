@@ -46,6 +46,7 @@ Route::prefix('talk')->name('talk')->group(function () {
     Route::get('/clap', [TalkController::class, 'clap'])->name('.clap');
     Route::get('/boo', [TalkController::class, 'boo'])->name('.boo');
     Route::post('/respond', [TalkController::class, 'respond'])->name('.respond');
+    Route::post('/reply-to-response', [TalkController::class, 'replyToResponse'])->name('.replyToResponse');
     Route::post('/update-response', [TalkController::class, 'updateResponse'])->name('.updateResponse');
     Route::get('/delete-response', [TalkController::class, 'deleteResponse'])->name('.deleteResponse');
     Route::get('/clap-to-response', [TalkController::class, 'clapToResponse'])->name('.clapToResponse');
