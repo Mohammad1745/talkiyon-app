@@ -68,7 +68,7 @@ class Repository
     }
 
     /**
-     *  @param $id
+     * @param int $id
      * @return mixed
      */
     public function delete (int $id)

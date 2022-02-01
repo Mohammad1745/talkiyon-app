@@ -20,8 +20,8 @@ class UserService extends Service
     }
 
     /**
-     * @param $data
-     * @param $randNo
+     * @param array $data
+     * @param string $randNo
      * @return array
      */
     public function userDataFormatter (array $data, string $randNo): array
